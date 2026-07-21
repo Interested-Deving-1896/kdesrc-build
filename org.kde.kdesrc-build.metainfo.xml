@@ -7,6 +7,7 @@
   <name xml:lang="ar">باني كيدي</name>
   <name xml:lang="ca">kdesrc-build</name>
   <name xml:lang="ca-valencia">kdesrc-build</name>
+  <name xml:lang="cs">kdesrc-build</name>
   <name xml:lang="de">kdesrc-build</name>
   <name xml:lang="el">kdesrc-build</name>
   <name xml:lang="en-GB">kdesrc-build</name>
@@ -41,6 +42,7 @@
   <summary xml:lang="ar">أداة تسمح لك ببناء برامج كيدي بسهولة من مستودعاتها المصدرية</summary>
   <summary xml:lang="ca">Eina que permet construir amb facilitat el programari KDE des dels seus repositoris d'origen</summary>
   <summary xml:lang="ca-valencia">Eina que permet construir amb facilitat el programari KDE des dels seus repositoris d'origen</summary>
+  <summary xml:lang="cs">Nástroj, který vám umožní snadno sestavit software KDE ze zdrojových repozitářů</summary>
   <summary xml:lang="el">Εργαλείο που σας επιτρέπει να κατασκευάζετε εύκολα λογισμικό του KDE από τα αποθετήρια πηγαίου κώδικα</summary>
   <summary xml:lang="en-GB">Tool to allow you to easily build KDE software from its source repositories</summary>
   <summary xml:lang="eo">Ilo por permesi vin facile konstrui KDE-programaron el ĝiaj fontdeponejoj</summary>
@@ -73,6 +75,7 @@
     <p xml:lang="ar">باني كيدي هي أداة تسمح لك ببناء كيدي بسهولة من مستودعاتها المصدرية.</p>
     <p xml:lang="ca">El kdesrc-build és una eina que permet construir amb facilitat el KDE des dels seus repositoris d'origen.</p>
     <p xml:lang="ca-valencia">kdesrc-build és una eina que permet construir amb facilitat KDE des dels seus repositoris d'origen.</p>
+    <p xml:lang="cs">kdesrc-build je nástroj, který vám umožní snadno sestavit KDE z jeho zdrojových repozitářů.</p>
     <p xml:lang="el">Το kdesrc-build είναιένα εργαλείο που σας επιτρέπει να κατασκευάζετε εύκολα το KDE από τα αποθετήρια πηγαίου κώδικα.</p>
     <p xml:lang="en-GB">kdesrc-build is a tool to allow you to easily build KDE from its source repositories.</p>
     <p xml:lang="eo">kdesrc-build estas ilo por permesi vin facile konstrui KDE el ĝiaj fontdeponejoj.</p>
@@ -104,6 +107,7 @@
     <p xml:lang="ar">يتوفر تمييز بناء الجملة لملفات باني كيدي kdesrc-buildrc في كيت / كاتبك عبر القائمة أدوات-&gt;تسليط الضوء-&gt;.</p>
     <p xml:lang="ca">El ressaltat de la sintaxi per als fitxers del kdesrc-buildrc és disponible en el Kate/KWrite a través del menú Eines-&gt;Ressaltat-&gt;Configuració.</p>
     <p xml:lang="ca-valencia">El ressaltat de la sintaxi per als fitxers de kdesrc-buildrc està disponible en Kate/KWrite a través del menú Eines-&gt;Ressaltat-&gt;Configuració.</p>
+    <p xml:lang="cs">Zvýrazňování syntaxe souborů kdesrc-buildrc je v aplikacích Kate a KWrite dostupné v nabídce Nástroje → Zvýraznění → Nastavení.</p>
     <p xml:lang="en-GB">Syntax highlighting for kdesrc-buildrc files is available in Kate/KWrite via the menu Tools-&gt;Highlighting-&gt;Configuration.</p>
     <p xml:lang="eo">Sintakso-markigo por kdesrc-buildrc-dosieroj estas disponebla en Kate/KWrite per la menuo Iloj-&gt;Elstarigado-&gt;Agordo.</p>
     <p xml:lang="es">El resaltado de sintaxis para los archivos de kdesrc-buildrc está disponible en Kate/KWrite mediante el menú Herramientas-&gt;Resaltado-&gt;Configuración.</p>
@@ -168,6 +172,7 @@
       <li xml:lang="ar">يجلب آليًّا ويحدث شفرة مصدر كيدي من مستودع المصدر الخاص به.</li>
       <li xml:lang="ca">Extraurà i actualitzarà automàticament el codi font del KDE des del seu repositori d'origen.</li>
       <li xml:lang="ca-valencia">Extraurà i actualitzarà automàticament el codi font de KDE des del seu repositori d'origen.</li>
+      <li xml:lang="cs">Automaticky stáhne a aktualizuje zdrojový kód KDE z jeho repozitáře.</li>
       <li xml:lang="en-GB">Will automatically checkout and update the KDE source code from its source repository.</li>
       <li xml:lang="eo">Aŭtomate elprenos kaj ĝisdatigos la fontkodon de KDE el ĝia fontdeponejo.</li>
       <li xml:lang="es">Descarga y actualiza automáticamente el código fuente de KDE desde su repositorio de código fuente.</li>
@@ -195,6 +200,7 @@
       <li xml:lang="ar">يتكامل مع البنية التحتية لشيفرة المصدر كيدي لبناء الوحدات النمطية آليًّا بالترتيب المطلوب، وباستخدام الفرع المناسب.</li>
       <li xml:lang="ca">S'integra amb la infraestructura de codi font del KDE per a construir automàticament els mòduls en l'ordre requerit, i usant la branca adequada.</li>
       <li xml:lang="ca-valencia">S'integra amb la infraestructura de codi font de KDE per a construir automàticament els mòduls en l'ordre requerit, i utilitzant la branca adequada.</li>
+      <li xml:lang="cs">Integruje se s infrastrukturou zdrojového kódu KDE tak, aby automaticky sestavoval moduly v požadovaném pořadí a s využitím příslušné větve.</li>
       <li xml:lang="el">Ενσωματώνεται με την υποδομή του πηγαίου κώδικα του KDE για την αυτόματη κατασκευή αρθρωμάτων στην απαιτούμενη σειρά και με χρήση του κατάλληλου κλάδου.</li>
       <li xml:lang="en-GB">Integrates with the KDE source code infrastructure to automatically build modules in the required order, and using the appropriate branch.</li>
       <li xml:lang="eo">Integriĝas kun la fontkoda infrastrukturo de KDE por aŭtomate konstrui modulojn en la bezonata ordo, kaj uzante la taŭgan branĉon.</li>
@@ -226,6 +232,7 @@
       <li xml:lang="ar">يدعم بسهولة إنشاء فروع أو علامات أو حتى مراجعات محددة لوحدة نمطية (أو كل برامج كيدي).</li>
       <li xml:lang="ca">Admet fer amb facilitat la creació de branques, etiquetes o fins i tot revisions específiques d'un mòdul (o de tot el programari KDE).</li>
       <li xml:lang="ca-valencia">Admet fer amb facilitat la creació de branques, etiquetes o fins i tot revisions específiques d'un mòdul (o de tot el programari KDE).</li>
+      <li xml:lang="cs">Snadno podporuje vytváření konkrétních větví, značek nebo dokonce revizí modulu (či celého softwaru KDE).</li>
       <li xml:lang="el">Υποστηρίζει εύκολα την κατασκευή συγκεκριμένων κλάδων, ετικετών ή και αναθεωρήσεων ενός αρθρώματος (ή όλου του KDE λογισμικού).</li>
       <li xml:lang="en-GB">Easily supports building specific branches, tags, or even revisions of a module (or all of KDE software).</li>
       <li xml:lang="eo">Facile subtenas konstrui specifajn branĉojn, etikedojn aŭ eĉ reviziojn de modulo (aŭ ĉiuj KDE-programaro).</li>
@@ -257,6 +264,7 @@
       <li xml:lang="ar">يدعم العديد من أنظمة البناء. من الممكن حتى بناء العديد من مشاريع البرامج غير كيدي بلمحة.</li>
       <li xml:lang="ca">Admet molts sistemes de construcció. En cas de necessitat, fins i tot és possible construir molts projectes de programari que no són del KDE en cas de necessitat.</li>
       <li xml:lang="ca-valencia">Admet molts sistemes de construcció. En cas de necessitat, fins i tot és possible construir molts projectes de programari que no són de KDE en cas de necessitat.</li>
+      <li xml:lang="cs">Podporuje řadu systémů pro sestavování softwaru. V nouzi je dokonce možné sestavit i mnoho softwarových projektů, které nesouvisí s KDE.</li>
       <li xml:lang="es">Permite usar diversos sistemas de compilación. Incluso puede compilar numerosos proyectos de software que no es de KDE si no hay más remedio.</li>
       <li xml:lang="eu">Eraikitzeko sistema ugari onartzen ditu. Besterik ezean, KDEkoak ez diren software proiektu asko eraikitzea ere posible da.</li>
       <li xml:lang="fi">Tukee monia koostamisjärjestelmiä. Tarpeen tullen voi koostaa monia ei-KDE-ohjelmiakin.</li>
@@ -281,6 +289,7 @@
       <li xml:lang="ar">يدعم وضع ”التشغيل التجريبي“ (--pretend) بحيث يمكنك تجربة إعدادات مختلفة دون تدمير.</li>
       <li xml:lang="ca">Admet una opció (--pretend), la qual fa el mode «simulacre» («dry run»), de manera que pugueu experimentar amb diferents opcions de configuració de forma no destructiva.</li>
       <li xml:lang="ca-valencia">Admet una opció (--pretend), la qual fa el mode «simulacre» («dry run»), de manera que pugueu experimentar amb diferents opcions de configuració de forma no destructiva.</li>
+      <li xml:lang="cs">Podporuje režim "simulace" (volba --pretend), díky čemuž můžete bez rizika ztráty dat experimentovat s různými nastaveními.</li>
       <li xml:lang="el">Υποστηρίζεται λειτουργία «πρόβας» (η επιλογή --pretend) για να πειραματιστείτε απρόσκοπτα με διαφορετικές ρυθμίσεις.</li>
       <li xml:lang="en-GB">Supports a "dry run" mode (the --pretend) option so that you can experiment with different settings non-destructively.</li>
       <li xml:lang="eo">Subtenas reĝimon "seka kurado" (la --pretend) opcion por ke vi povu eksperimenti kun malsamaj agordoj nedetrue.</li>
@@ -312,6 +321,7 @@
       <li xml:lang="ar">يمكن لباني كيدي kdesrc-build تنزيل الوحدات النمطية (سواءً النسخة الأولي أو التحديثات) حتى أثناء بناء الوحدات النمطية.</li>
       <li xml:lang="ca">El kdesrc-build pot descarregar els mòduls (extracció inicial i actualitzacions) fins i tot mentre construeix els mòduls que ja s'han actualitzat.</li>
       <li xml:lang="ca-valencia">kdesrc-build pot descarregar els mòduls (extracció inicial i actualitzacions) fins i tot mentre construïx els mòduls que ja s'han actualitzat.</li>
+      <li xml:lang="cs">kdesrc-build dokáže stahovat moduly (ať už se jedná o počáteční stažení nebo aktualizace) i během kompilace modulů, které již byly aktualizovány.</li>
       <li xml:lang="el">Με το kdesrc-build μπορεί να γίνει λήψη αρθρωμάτων (και αρχικές λήψεις και ενημερώσεις) ακόμη και όταν κατασκευάζονται αρθρώματα τα οποία έχουν ήση ενημερωθεί.</li>
       <li xml:lang="en-GB">kdesrc-build can download modules (both initial checkout and updates) even while building modules that have already been updated.</li>
       <li xml:lang="eo">kdesrc-build povas elŝuti modulojn (kaj komenca kontrolo kaj ĝisdatigoj) eĉ dum konstruado de moduloj jam ĝisdatigitaj.</li>
@@ -344,6 +354,7 @@
       <li xml:lang="ar">يسجل باني كيدي kdesrc-build كل شيء لتسهيل الاطلاع عليه لاحقًا، وبهذه الطريقة يمكنك تحديد سبب حدوث خطأ في حالة فشل الإنشاء. يقوم باني كيدي kdesrc-build آليًّا بإنشاء ارتباطات رمزية لسهولة الوصول إلى السجل الأخير (السجل/الأحدث).</li>
       <li xml:lang="ca">El kdesrc-build ho enregistra tot per a una lectura fàcil posterior, d'aquesta manera podreu determinar perquè les coses han sortit malament si falla una construcció. El kdesrc-build crearà automàticament enllaços simbòlics per a facilitar l'accés a l'últim registre (log/latest). Codificant amb colors la sortida (el qual es pot desactivar).</li>
       <li xml:lang="ca-valencia">kdesrc-build ho grava tot per a una lectura fàcil posterior, d'esta manera podreu determinar perquè les coses han eixit malament si falla una construcció. kdesrc-build crearà automàticament enllaços simbòlics per a facilitar l'accés a l'últim registre (log/latest). Codificant amb colors l'eixida (el qual es pot desactivar).</li>
+      <li xml:lang="cs">kdesrc-build zaznamenává vše do protokolu, což usnadňuje pozdější prohlížení; díky tomu můžete v případě selhání sestavení zjistit, proč k tomu došlo. kdesrc-build automaticky vytváří symbolické odkazy pro snadný přístup k poslednímu protokolu (log/latest). Výstup je barevně odlišen (tuto funkci lze vypnout).</li>
       <li xml:lang="el">Το kdesrc-build καταγράφει τα πάντα για εύκολη χρήση αργότερα, έτσι μπορείτε να να εξηγήσετε τι πήγε στραβά αν μια κατασκευή αποτύχει. Το kdesrc-build δημιουργεί αυτόματα συμβολικούς δεσμούς για εύκολη πρόσβαση στην τελευταία καταγραφή (καταγραφή/τελευταία) με χρώματα στην έξοδο (το οποίο μπορεί να απενεργοποιηθεί).</li>
       <li xml:lang="en-GB">kdesrc-build logs everything for easy perusal later, that way you can determine why things went wrong if a build fails. kdesrc-build automatically creates symlinks for easy access to the last log (log/latest). colour-coding of the output (which can be turned off).</li>
       <li xml:lang="eo">kdesrc-build registras ĉion por facila legado poste, tiel vi povas determini kial aferoj misfunkciis se konstruo malsukcesas. kdesrc-build aŭtomate kreas simbolligojn por facila aliro al la lasta protokolo (protokolo/lasta). kolorkodigo de la eligo (kiu povas esti malŝaltita).</li>
@@ -375,6 +386,7 @@
       <li xml:lang="ar">لديه دعم لبناء مكتبة كيو تي الخاصة بمشروع كيو تي، وهو شرط أساسي لبرامج كيدي.</li>
       <li xml:lang="ca">Té suport per a construir les biblioteques Qt del Qt Project, que és un requisit previ per al programari KDE.</li>
       <li xml:lang="ca-valencia">Té suport per a construir les biblioteques Qt de Qt Project, el qual és un requisit previ per al programari KDE.</li>
+      <li xml:lang="cs">Podporuje kompilaci knihovny Qt projektu Qt Project, která je nezbytným předpokladem pro fungování softwaru KDE.</li>
       <li xml:lang="en-GB">Has support for building the Qt Project's Qt library, which is a prerequisite for KDE software.</li>
       <li xml:lang="eo">Havas subtenon por konstrui la Qt-bibliotekon de la Qt Project, kio estas antaŭkondiĉo por KDE-programaro.</li>
       <li xml:lang="es">Permite compilar de la biblioteca Qt del Proyecto Qt, que es un prerrequisito para el software de KDE.</li>
@@ -403,6 +415,7 @@
       <li xml:lang="ar">باني كيدي kdesrc-build قابل للتخصيص بشكل كبير. يمكنك التحكم في معظم الخيارات لكل وحدة على حدة إذا رغبت في ذلك، بما في ذلك علامات الضبط، وعلامات CMake، وعلامات C++ أثناء التجميع. بدلاً من محاولة تذكر سطر الضبط الذي استخدمته، يمكنك ضبطه مرة واحدة ونسيانه.</li>
       <li xml:lang="ca">El kdesrc-build és molt personalitzable. Podreu controlar la majoria de les opcions fins a una base de fer mòdul per mòdul, si així ho voleu, incloent-hi indicadors de configuració, indicadors de CMake i els vostres indicadors de C++ durant la compilació. En lloc d'intentar recordar quina línia de configuració havíeu usat, podreu configurar-la un cop i oblidar-la.</li>
       <li xml:lang="ca-valencia">kdesrc-build és molt personalitzable. Podreu controlar la majoria de les opcions fins a una base de fer mòdul per mòdul, si així ho voleu, incloent-hi indicadors de configuració, indicadors de CMake i els vostres indicadors de C++ durant la compilació. En lloc d'intentar recordar quina línia de configuració havíeu utilitzat, podreu establir-la una vegada i oblidar-la.</li>
+      <li xml:lang="cs">kdesrc-build je velmi přizpůsobitelný. Pokud si to přejete, můžete většinu nastavení upravovat až na úrovni jednotlivých modulů, včetně příznaků pro configure, příznaků CMake a příznaků C++ při kompilaci. Namísto toho, abyste se snažili zapamatovat si, jaký příkaz configure jste použili, stačí jej nastavit jednou a už na to nemusíte myslet.</li>
       <li xml:lang="en-GB">kdesrc-build is very customisable. You can control most options down to a module-by-module basis if you so desire, including configure-flags, CMake flags, and your C++ flags during compilation. Instead of trying to remember what configure line you used, you can set it once and forget it.</li>
       <li xml:lang="eo">kdesrc-build estas tre agordebla. Vi povas kontroli plej multajn eblojn laŭmodula bazo, se vi tiel deziras, inkluzive de agordi-flagoj, CMake-flagoj, kaj viaj C++-flagoj dum kompilo. Anstataŭ provi memori kian agordan linion vi uzis, vi povas agordi ĝin unufoje kaj forgesi ĝin.</li>
       <li xml:lang="es">kdesrc-build es muy personalizable. Puede controlar la mayoría de las opciones para cada módulo, si lo desea, incluyendo banderas de configuración, banderas de CMake y banderas de C++ durante la compilación. En lugar de tratar de recordar la línea de configuración que ha usado, puede definirla una única vez y olvidarse de ella.</li>
