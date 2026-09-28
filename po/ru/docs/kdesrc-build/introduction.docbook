@@ -1,0 +1,77 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<chapter id="introduction">
+<title
+>Введение</title>
+
+<sect1 id="brief-intro">
+<title
+>Краткое введение в &kdesrc-build;</title>
+
+<sect2 id="whatis-kdesrc-build">
+<title
+>Что такое &kdesrc-build;?</title>
+
+<para
+>&kdesrc-build; — сценарий, помогающий сообществу &kde; устанавливать программы <ulink url="https://www.kde.org/"
+>&kde;</ulink
+> из репозиториев исходного кода <ulink url="https://git-scm.com/"
+>&git;</ulink
+> и затем обновлять их. Он предназначен прежде всего для тех, кто участвует в тестировании и разработке программ &kde;, — пользователей, проверяющих исправления, и разработчиков новых возможностей. </para>
+
+<para
+>Сценарий &kdesrc-build; можно настроить на поддержку одного модуля, полного рабочего стола &plasma; с набором приложений &kde; или чего-то среднего. </para>
+
+<para
+>Для начала смотрите <xref linkend="getting-started"/> или читайте дальше, как работает &kdesrc-build; и что описано в этой документации. </para>
+</sect2>
+
+<sect2 id="operation-in-a-nutshell">
+<title
+>Работа &kdesrc-build; <quote
+>в двух словах</quote
+></title>
+
+<para
+>&kdesrc-build; работает с помощью средств командной строки, доступных пользователю, через те же интерфейсы. При запуске &kdesrc-build; выполняется следующая последовательность: </para>
+
+<orderedlist>
+<listitem
+><para
+>&kdesrc-build; читает <link linkend="cmdline"
+>командную строку</link
+> и <link linkend="configure-data"
+>файл конфигурации</link
+>, определяя, что собирать, с какими параметрами компилировать, куда устанавливать и т. д.</para
+></listitem>
+
+<listitem
+><para
+>&kdesrc-build; обновляет исходный код каждого <link linkend="module-concept"
+>модуля</link
+>, пока не обновятся все. Модули, которые не удалось обновить, обычно не останавливают сборку &ndash; в конце будет сообщено, какие модули не обновились.</para
+></listitem>
+
+<listitem
+><para
+>Успешно обновлённые модули собираются, проходят свои тесты и устанавливаются. Чтобы сократить общее время, &kdesrc-build; по умолчанию начинает сборку, как только обновился первый модуль, а остальные обновления продолжаются в фоне. </para
+></listitem>
+</orderedlist>
+
+<tip
+><para
+><emphasis
+>Очень хороший</emphasis
+> обзор сборки модулей &kde; с наглядными схемами приведён в <ulink url="https://www.davidrevoy.com/article193/guide-building-krita-on-linux-for- cats"
+>онлайн-статье о приложении &krita; от &kde;</ulink
+>. Именно этот порядок работы &kdesrc-build; автоматизирует для всех модулей &kde;.</para>
+</tip>
+
+</sect2>
+</sect1
+>&intro-toc; </chapter>

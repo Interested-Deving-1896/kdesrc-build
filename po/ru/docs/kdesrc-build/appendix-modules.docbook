@@ -1,0 +1,185 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<appendix id="appendix-modules">
+<title
+>Модули &kde; и организация исходного кода</title>
+<sect1 id="module-concept">
+<title
+><quote
+>Модуль</quote
+></title>
+
+<para
+>&kde; объединяет свои программы в <quote
+>модули</quote
+> разного размера. Сначала это было нестрогое деление на несколько крупных модулей, но с переходом на <ulink url="https://commits.kde.org/"
+>репозитории исходного кода</ulink
+> на основе <ulink url="https://git-scm.com/"
+>Git</ulink
+> крупные модули разделились на множество мелких. </para>
+
+<para
+>&kdesrc-build; тоже использует понятие модуля. По сути, <quote
+>модуль</quote
+> — это часть кода, которую можно загрузить, собрать, проверить и установить. </para>
+
+<sect2 id="single-modules">
+<title
+>Отдельные модули</title>
+
+<para
+>Настроить &kdesrc-build; на сборку одного модуля просто. Ниже — пример описания модуля на основе Git в <link linkend="kdesrc-buildrc"
+>файле конфигурации</link
+>.</para>
+
+<programlisting
+>module <replaceable
+>kdefoo</replaceable>
+    <option
+><replaceable
+>cmake-options -DCMAKE_BUILD_TYPE=Debug</replaceable
+></option>
+end module
+</programlisting>
+
+<tip
+><para
+>Это модуль на основе Git, поскольку в нём не используется параметр <link linkend="conf-repository"
+>repository</link
+>. Параметр <option
+>cmake-options</option
+> приведён лишь для примера и не обязателен.</para
+></tip>
+
+</sect2>
+<sect2 id="module-groups">
+<title
+>Группы связанных модулей</title>
+
+<para
+>Сейчас большинство модулей исходного кода &kde; — это модули &kde; на основе Git, и обычно они объединяются в группы.</para>
+
+<para
+>Поэтому &kdesrc-build; поддерживает и группы модулей — <link linkend="module-sets"
+>наборы модулей</link
+>. Пример:</para>
+
+<programlisting
+>module-set <replaceable
+>base-modules</replaceable>
+    <option
+>repository</option
+> kde-projects
+    <option
+>use-modules</option
+> <replaceable
+>kde-runtime kde-workspace kde-baseapps</replaceable>
+end module-set
+</programlisting>
+
+<tip
+><para
+>Имя набора модулей (здесь <replaceable
+>base-modules</replaceable
+>) можно не указывать. Параметр <option
+>repository</option
+> сообщает &kdesrc-build;, откуда загружать исходный код; можно указать и URL <symbol
+>git://</symbol
+>.</para
+></tip>
+
+<para
+>Особенность <quote
+><option
+>repository</option
+> <literal
+>kde-projects</literal
+></quote
+> в том, что &kdesrc-build; автоматически добавит все модули Git, сгруппированные под перечисленными модулями (в базе данных проектов KDE).</para>
+</sect2>
+
+<sect2 id="module-branch-groups">
+<title
+><quote
+>Группы ветвей</quote
+> модулей</title>
+
+<para
+>Развивая идею <link linkend="module-groups"
+>групп модулей</link
+>, разработчики &kde; в итоге столкнулись с тем, что согласовывать имена ветвей Git во множестве репозиториев становится трудно, особенно в период активной разработки новых &kde; Frameworks для &Qt; 5. </para>
+
+<para
+>Так появились <quote
+>группы ветвей</quote
+>: пользователь или разработчик выбирает одну из немногих групп, а сценарий автоматически выбирает нужную ветвь Git. </para>
+
+<para
+>&kdesrc-build; поддерживает эту возможность начиная с версии 1.16-pre2 через параметр <link linkend="conf-branch-group"
+>branch-group</link
+>. </para>
+
+<example id="ex-branch-group">
+<title
+>Пример использования branch-group</title>
+
+<para
+>branch-group используется в файле конфигурации так: </para>
+
+<programlisting
+>global
+    # Выбрать KDE Frameworks 5 и другие приложения на основе Qt5
+    <option
+>branch-group</option
+> <replaceable
+>kf5-qt5</replaceable>
+
+    # Другие глобальные параметры...
+end global
+
+module-set
+    # branch-group работает только для kde-projects
+    <option
+>repository</option
+> kde-projects
+
+    # branch-group наследуется от глобального значения,
+    # но его можно задать и здесь.
+
+    <option
+>use-modules</option
+> <replaceable
+>kdelibs kde-workspace</replaceable>
+end module-set
+
+# Ветвь kdelibs будет "frameworks"
+# Ветвь kde-workspace будет "master" (на август 2013 года)
+</programlisting>
+
+<para
+>Здесь одна и та же <literal
+>branch-group</literal
+> даёт разные имена ветвей для разных модулей Git. </para>
+</example>
+
+<para
+>Для этой возможности нужны данные, которые разработчики &kde; ведут в репозитории Git <literal
+>kde-build-metadata</literal
+>; этот модуль &kdesrc-build; подключает автоматически (он может появиться в выводе сценария). </para>
+
+<tip
+><para
+>Для модулей &kde;, у которых для выбранной группы ветвей имя ветви не задано, используется подходящая ветвь по умолчанию — как если бы <literal
+>branch-group</literal
+> не был указан вовсе. </para
+></tip>
+
+</sect2>
+
+</sect1>
+</appendix>

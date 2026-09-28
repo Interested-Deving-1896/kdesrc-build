@@ -1,0 +1,205 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<appendix id="appendix-profile">
+<title
+>Устаревшие способы настройки профиля</title>
+
+<sect1 id="old-profile-setup">
+<title
+>Настройка профиля входа в &kde;</title>
+
+<para
+>Здесь описано, как настроить профиль, чтобы компьютер мог входить в только что собранный рабочий стол &kde; &plasma;. Обычно &kdesrc-build; пытается сделать это автоматически (смотрите <xref linkend="session-driver"/>). Этот раздел приложения пригодится тем, кто не может воспользоваться встроенной в &kdesrc-build; настройкой профиля входа. Инструкции могут быть не вполне актуальны, поэтому полезно заглянуть и в файл <filename
+>kde-env-master.sh.in</filename
+> из исходного кода &kdesrc-build;.</para>
+
+<sect2 id="changing-profile">
+<title
+>Изменение профиля запуска</title>
+
+<important
+><para
+><filename
+>.bash_profile</filename
+> — файл параметров входа популярной оболочки <application
+>bash</application
+>, используемой во многих дистрибутивах &Linux;. Для другой оболочки приведённые здесь примеры, возможно, придётся изменить.</para
+></important>
+
+<para
+>Откройте или создайте в домашнем каталоге файл <filename
+>.bash_profile</filename
+> в любимом редакторе и добавьте в конец файла следующее. Если вы собираете модуль qt (по умолчанию это так), добавьте: <programlisting>
+PATH=${install-dir}/bin:${qt-install-dir}/bin:$PATH
+MANPATH=${qt-install-dir}/doc/man:$MANPATH
+
+# Учесть случай, когда LD_LIBRARY_PATH ещё не задана.
+if [ -z $LD_LIBRARY_PATH ]; then
+  LD_LIBRARY_PATH=${install-dir}:/lib:${qt-install-dir}/lib
+else
+  LD_LIBRARY_PATH=${install-dir}:/lib:${qt-install-dir}/lib:$LD_LIBRARY_PATH
+fi
+
+export PATH MANPATH LD_LIBRARY_PATH
+</programlisting
+> а если qt не собирается (и используется системная &Qt;), добавьте вместо этого: <programlisting
+>PATH=${install-dir}/bin:${qt-install-dir}/bin:$PATH
+
+# Учесть случай, когда LD_LIBRARY_PATH ещё не задана.
+if [ -z $LD_LIBRARY_PATH ]; then
+  LD_LIBRARY_PATH=${install-dir}/lib
+else
+  LD_LIBRARY_PATH=${install-dir}/lib:$LD_LIBRARY_PATH
+fi
+
+export PATH LD_LIBRARY_PATH
+</programlisting>
+</para>
+
+<para
+>Если вы не используете отдельного пользователя, задайте для нового окружения другой $<envar
+>KDEHOME</envar
+> в <filename
+>.bash_profile</filename
+>: <programlisting
+>export KDEHOME="${HOME}/.kde-git"
+
+# Создать каталог при необходимости
+[ ! -e ~/.kde-git ] &amp;&amp; mkdir ~/.kde-git
+</programlisting>
+</para>
+
+<note>
+<para
+>Если позже меню K окажется пустым или переполненным приложениями дистрибутива, возможно, придётся задать в <filename
+>.bash_profile</filename
+> переменные окружения <acronym
+>XDG</acronym
+>: <programlisting
+>XDG_CONFIG_DIRS="/etc/xdg"
+XDG_DATA_DIRS="${install-dir}/share:/usr/share"
+export XDG_CONFIG_DIRS XDG_DATA_DIRS
+</programlisting>
+
+</para>
+</note>
+
+</sect2>
+<sect2 id="starting-kde">
+<title
+>Запуск &kde;</title>
+
+<para
+>Настроив окружение на нужную версию &kde;, важно убедиться, что используется и правильный сценарий <command
+>startkde</command
+>. </para>
+
+<para
+>Откройте текстовый файл <filename
+>.xinitrc</filename
+> в домашнем каталоге (или создайте его) и добавьте строку: <programlisting
+><command
+>exec</command
+> <option
+>${install-dir}/bin/startkde</option
+>
+</programlisting>
+</para>
+
+<important
+><para
+>В некоторых дистрибутивах то же самое нужно сделать с файлом <filename
+>.xsession</filename
+>, тоже в домашнем каталоге. Особенно это касается графических диспетчеров входа — sddm, <application
+>gdm</application
+> или <application
+>xdm</application
+>.</para>
+</important>
+
+<para
+>Теперь запустите свежую &kde;. В системах &BSD; и &Linux; с поддержкой виртуальных терминалов комбинации <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F1</keycap
+></keycombo
+> ... <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F12</keycap
+></keycombo
+> переключают на виртуальные консоли с 1 по 12. Это позволяет запускать одновременно несколько рабочих сред. Первые шесть — текстовые терминалы, следующие шесть — графические дисплеи. </para>
+
+<para
+>Если при включении компьютера появляется графический диспетчер входа, новую среду &kde; можно использовать, даже если её нет в списке. В большинстве диспетчеров входа, включая sddm, есть вариант <quote
+>Пользовательский сеанс</quote
+>: параметры сеанса берутся из файла <filename
+>.xsession</filename
+> в домашнем каталоге. Если вы уже изменили этот файл, как описано выше, этот вариант запустит новую установку &kde;. </para>
+
+<para
+>Если не получилось, есть ещё способ, который обычно работает: нажмите <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F2</keycap
+></keycombo
+> — откроется текстовый терминал. Войдите под отдельным пользователем и введите: </para>
+
+<screen
+><command
+>startx</command
+> <option
+>--</option
+> <option
+>:1</option
+>
+</screen>
+
+<tip>
+<para
+>&kde; из исходного кода и прежнюю &kde; можно запускать одновременно! Войдите под обычным пользователем и запустите стабильный рабочий стол &kde;. Нажмите <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F2</keycap
+></keycombo
+> (или <keycap
+>F1</keycap
+>, <keycap
+>F3</keycap
+> и т. д.) — откроется текстовый терминал. Войдите под отдельным пользователем для &kde; из &git; и введите:</para>
+
+<screen
+><command
+>startx</command
+> <option
+>--</option
+> <option
+>:1</option
+>
+</screen>
+
+<para
+>Вернуться на рабочий стол &kde; обычного пользователя можно комбинацией клавиш уже запущенного рабочего стола — обычно это <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F7</keycap
+></keycombo
+>, но может понадобиться <keycap
+>F6</keycap
+> или <keycap
+>F8</keycap
+>. Чтобы вернуться в &kde;, собранную &kdesrc-build;, используйте ту же комбинацию со следующей функциональной клавишей. Например, если для обычной &kde; нужно <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F7</keycap
+></keycombo
+>, то для &kde; из &kdesrc-build; — <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F8</keycap
+></keycombo
+>.</para>
+</tip>
+
+</sect2>
+</sect1>
+
+</appendix>

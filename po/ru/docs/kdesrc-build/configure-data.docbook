@@ -1,0 +1,143 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<sect1 id="configure-data">
+<title
+>Настройка конфигурации</title>
+
+<para
+>Для работы &kdesrc-build; в каталоге <filename
+>~/.config</filename
+> (или <envar
+>$XDG_CONFIG_HOME</envar
+>, если задана) должен быть файл <filename
+>kdesrc-buildrc</filename
+> с общими параметрами и списком модулей для загрузки и сборки. </para>
+
+<note
+><para
+>Для &kdesrc-build; можно использовать разные файлы конфигурации, как описано в <xref linkend="kdesrc-buildrc"/>; если нужно несколько конфигураций, прочитайте этот раздел. Здесь считается, что конфигурация хранится в <filename
+>~/.config/kdesrc-buildrc</filename
+>. </para
+></note>
+
+<para
+>Проще всего взять за основу файл <filename
+>kdesrc-buildrc-kf5-sample</filename
+>, изменив глобальные параметры и список собираемых модулей по своему вкусу. </para>
+
+<para
+>Параметры по умолчанию подходят для сборки &kde;. Возможно, стоит изменить следующие: </para>
+
+<itemizedlist>
+<listitem
+><para
+><link linkend="conf-install-dir"
+>install-dir</link
+> — каталог, в который устанавливаются программы &kde;. По умолчанию <filename class="directory"
+>~/kde/usr</filename
+>, то есть установка для одного пользователя.</para
+></listitem>
+
+<listitem
+><para
+><link linkend="conf-branch-group"
+>branch-group</link
+> — выбор ветви разработки для модулей &kde; в целом. Поддерживается много конфигураций сборки, но, скорее всего, стоит выбрать <option
+>kf6-qt6</option
+>, чтобы &kdesrc-build; загружал новейший код на основе &Qt; 6 и &kde; Frameworks 6.</para>
+
+<tip
+><para
+>Если группу ветвей не выбрать, &kdesrc-build; использует группу по умолчанию, но она со временем меняется, поэтому лучше выбрать группу явно, чтобы она не сменилась неожиданно.</para
+></tip>
+</listitem>
+
+<listitem
+><para
+><link linkend="conf-source-dir"
+>source-dir</link
+> — каталог, который &kdesrc-build; использует для загрузки исходного кода, сборки и сохранения журналов. По умолчанию <filename class="directory"
+>~/kde/src</filename
+>.</para
+></listitem>
+
+<listitem
+><para
+><link linkend="conf-cmake-options"
+>cmake-options</link
+> — параметры, передаваемые команде &cmake; при сборке каждого модуля. Обычно с их помощью выбирают между отладочной (<quote
+>debug</quote
+>) и выпускной (<quote
+>release</quote
+>) сборкой, включают или отключают необязательные возможности, сообщают сборке, где лежат нужные библиотеки. </para
+></listitem>
+
+<listitem
+><para
+><link linkend="conf-make-options"
+>make-options</link
+> — параметры запуска команды <application
+>make</application
+> при сборке каждого модуля (после того как &cmake; создаст систему сборки). </para>
+
+<para
+>Самый типичный параметр — <option
+>-j<replaceable
+>N</replaceable
+></option
+>, где <replaceable
+>N</replaceable
+> — наибольшее допустимое число заданий компиляции. Чем больше число (вплоть до числа логических процессоров системы), тем быстрее сборка, но тем больше нужно ресурсов. </para>
+
+<tip
+><para
+>&kdesrc-build; задаёт параметру <option
+><link linkend="conf-num-cores"
+>num-cores</link
+></option
+> обнаруженное число доступных процессорных ядер. Это значение можно использовать в своём файле конфигурации, чтобы не задавать его вручную. </para
+></tip>
+
+<example id="make-options-example">
+<title
+>Настройка make на использование всех процессоров, с исключениями</title>
+<screen
+>global
+    # Эту переменную окружения make использует автоматически, в том числе
+    # в командах, запускаемых не самим kdesrc-build, например в configure Qt
+    set-env MAKEFLAGS -j<literal
+>${num-cores}</literal>
+    &hellip;
+end global
+
+&hellip;
+
+module-set <replaceable
+>big-module-set</replaceable>
+    repository kde-projects
+    use-modules <replaceable
+>calligra</replaceable>
+    make-options -j2 # Меньше заданий сборки только для этих модулей
+end module-set
+</screen>
+</example>
+
+<note
+><para
+>Некоторые очень большие репозитории Git, особенно &Qt; WebKit и &Qt; WebEngine, при компиляции слишком многими заданиями сразу могут перегрузить систему. Чтобы система оставалась отзывчивой, для отдельных модулей число заданий сборки, возможно, придётся уменьшить.</para>
+<para
+><xref linkend="make-options-example"/> показывает, как это сделать.</para>
+</note>
+
+</listitem>
+</itemizedlist>
+
+<para
+>Выбор других собираемых модулей описан в <xref linkend="selecting-modules"/>.</para>
+
+</sect1>

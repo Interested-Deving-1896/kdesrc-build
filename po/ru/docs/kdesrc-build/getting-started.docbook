@@ -1,0 +1,274 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<chapter id="getting-started">
+<title
+>Начало работы</title>
+
+<para
+>В этой главе показано, как с помощью &kdesrc-build; получить модули из репозитория &kde; и собрать их. Кроме того, кратко описаны структура исходного кода &kde; и шаги, которые нужно выполнить до запуска сценария. </para>
+
+<para
+>Все темы этой главы ещё подробнее разобраны в статье <ulink url="https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source"
+>Build from Source</ulink
+> в <ulink url="https://community.kde.org/"
+>вики сообщества &kde;</ulink
+>. Если вы компилируете &kde; впервые, стоит её прочитать или обращаться к ней как к справочнику. Там подробно описаны средства и требования к пакетам, типичные ловушки и приёмы компиляции, а также запуск новой установки &kde;. </para>
+
+<sect1 id="before-building">
+<title
+>Подготовка системы к сборке &kde;</title>
+
+<sect2 id="before-building-users">
+<title
+>Создание новой учётной записи</title>
+
+<para
+>Для сборки, установки и запуска программ &kde; рекомендуется отдельная учётная запись: так нужно меньше прав и не затрагиваются пакеты дистрибутива. Если пакеты &kde; уже установлены, лучше всего создать отдельного пользователя для сборки и запуска новой &kde;. </para>
+
+<tip
+><para
+>Нетронутая системная &kde; служит и запасным вариантом на случай, если из-за ошибки в коде свежая сборка окажется непригодной. </para
+></tip>
+
+<para
+>При желании можно настроить установку и в общесистемный каталог (например, <filename class="directory"
+>/usr/src/local</filename
+>). Этот вариант здесь не описан: предполагается, что вы знаете, что делаете. </para>
+
+</sect2>
+<sect2 id="before-building-preparation">
+<title
+>Проверка готовности системы к сборке программ &kde;</title>
+
+<para
+>Прежде чем использовать сценарий &kdesrc-build; (или любой другой способ сборки), установите средства разработки и библиотеки, нужные &kde;. Почти полный список нужных средств — на странице <ulink url="https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source#Install_required_devel_packages"
+>требований к сборке в вики сообщества &kde;</ulink
+>. </para>
+
+<para
+>Вот часть того, что понадобится:</para>
+<itemizedlist>
+
+<listitem
+><para
+>&cmake; — с его помощью &kde; настраивает исходный код при сборке и создаёт команды сборки для конкретной системы. Нужная версия зависит от собираемых версий программ &kde; (подробности на TechBase), но в современных дистрибутивах поставляемого &cmake; вполне достаточно. </para
+></listitem>
+
+<listitem
+><para
+>Нужно установить и клиенты систем управления версиями для получения исходного кода &kde;, как минимум:</para>
+
+<itemizedlist>
+<listitem
+><para
+><ulink url="https://git-scm.com/"
+>систему управления версиями Git</ulink
+>, в которой хранится весь <ulink url="https://commits.kde.org/"
+>исходный код</ulink
+> &kde;</para
+></listitem>
+
+<listitem
+><para
+>Необязательно, но система управления версиями <ulink url="http://bazaar.canonical.com/"
+>Bazaar</ulink
+> используется для одного модуля (libdbusmenu-qt), нужного библиотекам &kde;. Большинство пользователей может установить эту библиотеку из пакетов дистрибутива, но &kdesrc-build; умеет и собирать её — для этого нужен установленный Bazaar.</para
+></listitem>
+</itemizedlist
+></listitem>
+
+<listitem
+><para
+>Язык сценариев Perl нужен &kdesrc-build;, некоторым репозиториям &kde; и &Qt; (если собирать её из исходного кода).</para>
+
+<para
+>Perl из дистрибутива должен подойти (нужен как минимум Perl 5.14), но понадобятся и некоторые дополнительные модули (&kdesrc-build; предупредит, если их нет):</para>
+
+<itemizedlist>
+    <listitem
+><para
+>IO::Socket::SSL</para
+></listitem>
+    <listitem
+><para
+>JSON::PP или JSON::XS</para
+></listitem>
+    <listitem
+><para
+>YAML::PP, YAML::XS или YAML::Syck</para
+></listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+>Полноценная среда разработки на C++ (компилятор, стандартная библиотека, среда выполнения и нужные пакеты разработки). Минимальные версии зависят от модуля &kde;: &kde; Frameworks 5 поддерживают самые старые компиляторы, а &kde; Plasma 5 и приложения &kde; обычно требуют более новых.</para>
+<para
+>Рекомендуемый минимум — компиляторы GCC 4.8 или Clang 4. Во многих дистрибутивах их легко установить пакетом вроде <quote
+>build-essentials</quote
+>, установкой «зависимостей сборки» &Qt; и т. п. В вики сообщества KDE есть страница со <ulink url="https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source/Install_the_dependencies"
+>списком рекомендуемых пакетов для основных дистрибутивов</ulink
+>. </para>
+</listitem>
+
+<listitem
+><para
+>Средство сборки, выполняющее шаги компиляции (созданные &cmake;). Рекомендуется GNU Make, который должен быть доступен в диспетчере пакетов. &cmake; поддерживает и другие варианты, например средство сборки &ninja;, которое &kdesrc-build; может использовать через параметр файла конфигурации <link linkend="conf-custom-build-command"
+>custom-build-command</link
+>. </para
+></listitem>
+
+<listitem
+><para
+>Наконец, нужны библиотеки &Qt; (включая пакеты разработки) подходящей для собираемых программ &kde; версии. Официально &kdesrc-build; не поддерживает сборку &Qt; 5 (текущей основной версии), поэтому рекомендуется использовать пакеты разработки дистрибутива или обратиться к странице вики сообщества KDE о <ulink url="https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source/OwnQt5"
+>самостоятельной сборке Qt 5</ulink
+>. </para
+></listitem>
+</itemizedlist>
+
+<note
+><para
+>В большинстве дистрибутивов есть простой способ установить нужные средства разработки. Посмотрите на странице вики сообщества <ulink url="https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source#Install_required_devel_packages"
+>Required devel packages</ulink
+>, нет ли уже готовых указаний.</para
+></note>
+
+<important
+><para
+>Некоторые из этих пакетов разделены на библиотеки (программы, утилиты) и пакеты разработки. Нужны как минимум программа или библиотека <emphasis
+>и</emphasis
+> её пакет разработки. </para
+></important>
+
+</sect2>
+
+<sect2 id="before-building-prepare-script">
+<title
+>Настройка &kdesrc-build;</title>
+
+<sect3 id="get-kdesrc-build">
+<title
+>Установка &kdesrc-build;</title>
+<para
+>Разработчики &kde; часто меняют &kdesrc-build;, чтобы он поспевал за развитием &kde;: улучшают рекомендуемую конфигурацию &kdesrc-build;, добавляют модули, совершенствуют флаги &cmake; и т. д.</para>
+
+<para
+>Поэтому рекомендуется брать &kdesrc-build; прямо из его репозитория исходного кода и периодически обновлять.</para>
+
+<para
+>Получить &kdesrc-build; из репозитория исходного кода можно командой:</para>
+<programlisting
+><prompt
+>$ </prompt
+><userinput
+><command
+>git <option
+>clone</option
+> <option
+>https://invent.kde.org/sdk/kdesrc-build.git</option
+> <option
+><filename class="directory"
+><replaceable
+>~/kdesrc-build</replaceable
+></filename
+></option
+></command
+></userinput
+>
+</programlisting>
+
+<para
+>Замените <option
+><replaceable
+>~/kdesrc-build</replaceable
+></option
+> каталогом, куда нужно установить сценарий. </para>
+
+<para
+>Позже &kdesrc-build; обновляется командами:</para>
+<programlisting
+><prompt
+>$ </prompt
+><userinput
+><command
+>cd <option
+><filename class="directory"
+><replaceable
+>~/kdesrc-build</replaceable
+></filename
+></option
+></command
+></userinput>
+<prompt
+>$ </prompt
+><userinput
+><command
+>git <option
+>pull</option
+></command
+></userinput
+>
+</programlisting>
+
+<tip
+><para
+>Рекомендуется добавить каталог установки &kdesrc-build; в переменную окружения <envar
+>PATH</envar
+>, чтобы запускать &kdesrc-build;, не указывая каждый раз полный путь.</para
+></tip>
+</sect3>
+
+<sect3 id="setup-rcfile">
+<title
+>Подготовка файла конфигурации</title>
+
+<para
+>&kdesrc-build; использует <link linkend="configure-data"
+>файл конфигурации</link
+>, определяющий, какие модули собирать, куда устанавливать и т. д. Файл находится в <filename
+>~/.config/kdesrc-buildrc</filename
+> (или в <filename
+>$XDG_CONFIG_HOME/kdesrc-buildrc</filename
+>, если задана <envar
+>$XDG_CONFIG_HOME</envar
+>).</para>
+
+<para
+>Простую конфигурацию kdesrc-build можно подготовить командой <application
+>kdesrc-build --generate-config</application
+>, а затем изменить файл конфигурации <filename
+>~/.config/kdesrc-buildrc</filename
+> по своему усмотрению.</para>
+
+<sect4 id="setup-rcfile-manually">
+<title
+>Ручная настройка файла конфигурации</title>
+
+<para
+>Файл конфигурации можно настроить и вручную: скопируйте прилагаемый образец <filename
+>kdesrc-buildrc-kf5-sample</filename
+> в <filename
+>~/.config/kdesrc-buildrc</filename
+> и отредактируйте его. Полезным справочником будет <xref linkend="kdesrc-buildrc"/>, особенно его <link linkend="conf-options-table"
+>таблица параметров конфигурации</link
+>. </para>
+
+<para
+>В &kdesrc-build; есть много рекомендуемых файлов конфигурации для &kde; Frameworks 5, &plasma; 5 и других приложений &kde;. Как подключать другие файлы конфигурации из своего <filename
+>kdesrc-buildrc</filename
+>, описано в <xref linkend="kdesrc-buildrc-including"/>. </para>
+
+<para
+>Подробнее о синтаксисе <link linkend="configure-data"
+>файла конфигурации</link
+> — в <xref linkend="configure-data"/> и <xref linkend="kdesrc-buildrc"/>. </para>
+</sect4>
+</sect3>
+</sect2>
+</sect1
+>&configure-data; &building-and-troubleshooting; &building-specific-modules; &environment; &kde-modules-and-selection; &quick-start-conclusion; </chapter>

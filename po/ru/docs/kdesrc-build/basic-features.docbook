@@ -1,0 +1,237 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<sect1 id="basic-features">
+<title
+>Основные возможности &kdesrc-build;</title>
+
+<sect2 id="using-qt">
+<title
+>Поддержка qt</title>
+<para
+>Для удобства пользователей &kdesrc-build; умеет собирать библиотеку &Qt;, используемую программами &kde;. За это отвечает особый модуль qt.</para>
+
+<note
+><para
+>&Qt; разрабатывается в отдельном от &kde; репозитории: <ulink url="http://code.qt.io/cgit/qt/"
+>http://code.qt.io/cgit/qt/</ulink
+>.</para
+></note>
+
+<para
+>Чтобы собрать &Qt;, убедитесь, что параметр <link linkend="conf-qt-install-dir"
+>qt-install-dir</link
+> указывает на каталог, куда нужно установить &Qt;, как описано в разделе <xref linkend="configure-data"/>.</para>
+
+<para
+>Затем добавьте модуль qt в <filename
+>.kdesrc-buildrc</filename
+> раньше всех остальных модулей. Если используется образец файла конфигурации, достаточно раскомментировать имеющуюся запись модуля qt.</para>
+
+<para
+>Теперь проверьте, правильно ли заданы параметры <link linkend="conf-repository"
+>repository</link
+> и <link linkend="conf-branch"
+>branch</link
+>:</para>
+
+<orderedlist>
+<listitem
+><para
+>Первый вариант — собирать &Qt; из зеркала в репозиториях исходного кода &kde; (это просто клон официального исходного кода без каких-либо изменений). Он настоятельно рекомендуется, поскольку при клонировании полного модуля &Qt; из официального репозитория иногда возникают проблемы.</para>
+
+<para
+>Для этого задайте параметру <option
+>repository</option
+> модуля qt значение <userinput
+>kde:qt</userinput
+>.</para>
+</listitem>
+
+<listitem
+><para
+>Иначе, чтобы собрать стандартную &Qt;, задайте параметру <option
+>repository</option
+> значение <userinput
+>git://gitorious.org/qt/qt.git</userinput
+>. Учтите, что первоначальное клонирование &Qt; из этого репозитория может вызывать проблемы.</para
+></listitem>
+</orderedlist>
+
+<para
+>В обоих случаях параметр branch должен иметь значение <userinput
+>master</userinput
+> (если вы не хотите собрать другую ветвь).</para>
+
+</sect2>
+
+<sect2 id="kdesrc-build-std-flags">
+<title
+>Стандартные флаги, добавляемые &kdesrc-build;</title>
+<para
+>Обратите внимание: этот раздел не относится к модулям, для которых настроен собственный набор средств сборки, например через <link linkend="conf-cmake-toolchain"
+>cmake-toolchain</link
+>.</para>
+
+<para
+>Чтобы сэкономить ваше время, &kdesrc-build; сам добавляет в окружение некоторые стандартные пути: </para>
+
+<itemizedlist>
+<listitem
+><para
+>Путь к библиотекам &kde; и &Qt; автоматически добавляется в переменную <envar
+>LD_LIBRARY_PATH</envar
+>, поэтому вносить его в &libpath; не нужно. </para
+></listitem>
+
+<listitem
+><para
+>Пути к вспомогательным программам разработки &kde; и &Qt; автоматически добавляются в переменную <envar
+>PATH</envar
+>, поэтому вносить их в &binpath; не нужно. </para
+></listitem>
+
+<listitem
+><para
+>Путь к <application
+>pkg-config</application
+> из &kde; автоматически добавляется в <envar
+>PKG_CONFIG_PATH</envar
+>, поэтому добавлять его через &set-env; не нужно. </para
+></listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="build-priority">
+<title
+>Изменение приоритета сборки &kdesrc-build;</title>
+<para
+>В операционных системах, в том числе &Linux; и &BSD;, программы могут выполняться с разным приоритетом. Это позволяет системе распределять время между программами в соответствии с их важностью. </para>
+
+<para
+>Обычно &kdesrc-build; назначает себе низкий приоритет, чтобы не мешать остальным программам в системе. Так &kdesrc-build; использует процессор, когда он свободен. </para>
+
+<para
+>При этом &kdesrc-build; сохраняет достаточно высокий приоритет, чтобы выполняться раньше обычных пакетных задач и программ добровольных вычислений вроде <ulink url="http://setiathome.ssl.berkeley.edu/"
+>Seti@Home</ulink
+>. </para>
+
+<para
+>Чтобы &kdesrc-build; постоянно работал с более высоким (или низким) приоритетом, измените параметр &niceness; в <link linkend="configure-data"
+>файле конфигурации</link
+>. &niceness; определяет, насколько <quote
+>уступчив</quote
+> &kdesrc-build; по отношению к другим программам: чем больше &niceness;, тем ниже приоритет &kdesrc-build;. Поэтому, чтобы повысить приоритет &kdesrc-build;, уменьшите &niceness; (и наоборот). &niceness; принимает значения от 0 (совсем не уступчив, наивысший приоритет) до 20 (максимально уступчив, наинизший приоритет).</para>
+
+<para
+>Временно изменить приоритет &kdesrc-build; можно <link linkend="cmdline"
+>параметром командной строки</link
+> &cmd-nice;. Его значение действует точно так же, как &niceness;.</para>
+
+<note
+><para
+>У некоторых программ, запущенных суперпользователем, значение nice может быть отрицательным, что даёт им ещё более высокий приоритет. Задавать &kdesrc-build; отрицательное (и даже нулевое) &niceness; — не лучшая идея: время сборки заметно не сократится, а компьютер, если он вам понадобится, будет казаться очень медлительным. </para
+></note>
+
+<informalexample>
+<para
+>Запуск &kdesrc-build; со значением niceness 15 (приоритет ниже обычного):</para>
+
+<screen
+><prompt
+>&percnt;</prompt
+> <userinput
+><command
+>kdesrc-build</command
+> <option
+>--nice=<replaceable
+>15</replaceable
+></option
+></userinput
+>
+</screen>
+
+<para
+>Или измените <link linkend="configure-data"
+>файл конфигурации</link
+>, чтобы изменение было постоянным:</para>
+
+<screen
+>&niceness; <replaceable
+>15</replaceable
+>
+</screen>
+</informalexample>
+
+<tip>
+<para
+>Параметр <link linkend="conf-niceness"
+>niceness</link
+> влияет только на использование процессора. На производительность компьютера сильно влияет и объём ввода-вывода (<acronym
+>I/O</acronym
+>) программы. Для управления объёмом <acronym
+>I/O</acronym
+> в современных &Linux; есть похожее средство — <application
+>ionice</application
+>. &kdesrc-build; поддерживает <application
+>ionice</application
+> (только полное включение или отключение) через параметр <link linkend="conf-use-idle-io-priority"
+>use-idle-io-priority</link
+> начиная с &kdesrc-build; версии 1.12. </para>
+</tip>
+
+</sect2>
+
+<sect2 id="root-installation">
+<title
+>Установка от имени суперпользователя</title>
+<para
+>Может понадобиться, чтобы &kdesrc-build; выполнял установку с правами суперпользователя, — например, при не рекомендуемой общесистемной установке. Но это полезно и при рекомендуемой сборке &kde; для одного пользователя: некоторые модули (особенно kdebase) устанавливают программы, которым при запуске ненадолго нужны повышенные права, а получить их они могут, только если установлены с повышенными правами. </para>
+
+<para
+>Можно просто запустить &kdesrc-build; от имени суперпользователя, но это не рекомендуется: программа не проверялась на такое использование. Хотя такой запуск должен быть безопасным, по возможности лучше избегать работы от имени суперпользователя.</para>
+
+<para
+>Для этого в &kdesrc-build; есть параметр &make-install-prefix;. В нём задаётся команда, с помощью которой установка выполняется от имени другого пользователя. Рекомендуется использовать программу &sudo;, которая выполнит команду установки от имени суперпользователя. </para>
+
+<informalexample>
+<para
+>Например, чтобы устанавливать все модули через &sudo;, можно написать так:</para>
+
+<screen
+>global
+  &make-install-prefix; <replaceable
+>sudo</replaceable>
+  # Прочие параметры
+end global
+</screen>
+
+<para
+>Чтобы использовать &make-install-prefix; только для одного модуля: </para>
+
+<screen
+>module <replaceable
+>some-module-name</replaceable>
+  &make-install-prefix; <replaceable
+>sudo</replaceable>
+end module
+</screen>
+</informalexample>
+
+</sect2>
+
+<sect2 id="build-progress">
+<title
+>Показ хода сборки модуля</title>
+<para
+>Эта возможность доступна всегда и включается автоматически, когда это возможно. При сборке модуля показывается примерный ход сборки, так что видно, сколько ещё она продлится. </para>
+
+</sect2>
+
+</sect1>

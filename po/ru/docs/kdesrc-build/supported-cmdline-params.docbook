@@ -1,0 +1,1155 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<sect1 id="supported-cmdline-params">
+<title
+>Поддерживаемые параметры командной строки</title>
+
+<sect2>
+<title
+>Общее</title>
+<variablelist>
+
+<varlistentry id="cmdline-pretend">
+<term
+><option
+><link linkend="cmdline-pretend"
+>--pretend</link
+></option
+> (или <option
+>--dry-run</option
+> или <option
+>-p</option
+>)</term>
+<listitem
+><para
+>&kdesrc-build; пройдёт по процессу обновления и сборки, но вместо действий выведет, что сделал бы сценарий (какие команды запустил бы, какие общие шаги выполнил бы и т. д.).</para>
+
+<note
+><para
+>Простые команды, только читающие данные (например, сведения о файлах), всё же могут выполняться, чтобы вывод был точнее (например, правильно имитировал, будет ли код получен или обновлён). </para
+></note>
+
+<important
+><para
+>Для этого параметра нужны метаданные, которые обычно загружаются автоматически, но в режиме имитации загрузка отключена. Если &kdesrc-build; ещё ни разу не запускался (и метаданных нет), сначала выполните <command
+>kdesrc-build <option
+>--metadata-only</option
+></command
+>. </para
+></important>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-include-dependencies">
+<term
+><option
+><link linkend="cmdline-include-dependencies"
+>--include-dependencies</link
+></option
+> (или <option
+>-d</option
+>), <option
+>--no-include-dependencies</option
+> (или <option
+>-D</option
+>)</term>
+<listitem
+><para
+>С этим параметром &kdesrc-build; автоматически включает в сборку другие модули &kde; и &Qt;, если они нужны модулям, указанным в командной строке или в <link linkend="configure-data"
+>файле конфигурации</link
+>.</para>
+
+<para
+>Добавляемые модули определяются по записям в системе управления исходным кодом &kde;. Смотрите <xref linkend="kde-projects-module-sets"/>.</para>
+
+<para
+>Соответствующий параметр файла конфигурации — <link linkend="conf-include-dependencies"
+>include-dependencies</link
+>.</para>
+
+<para
+>Параметр включён по умолчанию.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-ignore-modules">
+<term
+><option
+><link linkend="cmdline-ignore-modules"
+>--ignore-modules</link
+></option
+> (или <option
+>-!</option
+>) <parameter
+>модуль [модуль ...]</parameter
+></term>
+<listitem
+><para
+>Не включать в обновление и сборку модули, перечисленные в оставшейся части командной строки (удобно, если нужно собрать большинство модулей из <link linkend="configure-data"
+>файла конфигурации</link
+>, пропустив несколько). </para>
+<para
+>Этот параметр не перекрывает параметр <link linkend="conf-ignore-modules"
+>ignore-modules</link
+> глобального раздела, а дополняет его.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-run">
+<term
+><option
+><link linkend="cmdline-run"
+>--run</link
+></option
+> (или <option
+>--start-program</option
+>) [-e|--exec name] [-f|--fork] <parameter
+>программа [параметры ...]</parameter
+></term>
+<listitem
+><para
+>Следующий элемент командной строки трактуется как запускаемая программа: &kdesrc-build; дочитает файл конфигурации, подключит prefix.sh, чтобы применить переменные окружения, и запустит указанную программу.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-revision">
+<term
+><option
+><link linkend="cmdline-revision"
+>--revision</link
+></option
+> <replaceable
+>id</replaceable
+></term>
+<listitem
+><para
+>С этим параметром &kdesrc-build; получает для каждого модуля &git; ревизию с указанным номером, перекрывая заданные для модулей параметры <link linkend="conf-branch"
+>branch</link
+>, <link linkend="conf-tag"
+>tag</link
+> или <link linkend="conf-revision"
+>revision</link
+>.</para>
+
+<para
+>Скорее всего, это не лучшая идея; параметр поддерживается только для совместимости со старыми сценариями. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-delete-my-patches">
+<term
+><option
+><link linkend="cmdline-delete-my-patches"
+>--delete-my-patches</link
+></option
+>, <option
+>--no-delete-my-patches</option
+></term>
+<listitem
+><para
+>Разрешает &kdesrc-build; удалять каталоги исходного кода, которые могут содержать пользовательские данные, чтобы загрузить модуль заново. Обычно полезно только разработчикам &kde; (у которых могут быть локальные изменения, которые будут удалены).</para>
+
+<para
+>Обычно этот параметр не нужен: при необходимости &kdesrc-build; сам предложит перезапуск с ним.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-delete-my-settings">
+<term
+><option
+><link linkend="cmdline-delete-my-settings"
+>--delete-my-settings</link
+></option
+>, <option
+>--no-delete-my-settings</option
+></term>
+<listitem
+><para
+>Разрешает &kdesrc-build; перезаписывать существующие файлы, которые могут содержать пользовательские данные.</para>
+
+<para
+>Сейчас это используется только при настройке xsession для диспетчера входа. Обычно этот параметр не нужен: при необходимости &kdesrc-build; сам предложит перезапуск с ним.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-option-name">
+<term
+><option
+><link linkend="cmdline-option-name"
+>--<replaceable
+>&lt;имя-параметра&gt;</replaceable
+></link
+></option
+> <replaceable
+>значение</replaceable
+></term>
+<listitem
+><para
+>Позволяет перекрыть параметр <link linkend="configure-data"
+>файла конфигурации</link
+> для всех модулей. Например, чтобы перекрыть параметр <link linkend="conf-log-dir"
+>log-dir</link
+>, укажите <userinput
+><parameter
+>--log-dir <filename class="directory"
+><replaceable
+>/path/to/dir</replaceable
+></filename
+></parameter
+></userinput
+>. </para>
+
+<note
+><para
+>Это работает только для параметров, известных &kdesrc-build; и не имеющих собственных параметров командной строки. Например, для параметра файла конфигурации <link linkend="conf-async"
+>async</link
+> есть особые параметры командной строки <link linkend="cmdline-async"
+>--async</link
+> и <link linkend="cmdline-async"
+>--no-async</link
+>, которым &kdesrc-build; отдаёт предпочтение. </para
+></note>
+
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-set-module-option-value">
+<term
+><option
+><link linkend="cmdline-set-module-option-value"
+>--set-module-option-value</link
+> <replaceable
+>&lt;имя-модуля&gt;</replaceable
+>,<replaceable
+>&lt;имя-параметра&gt;</replaceable
+>,<replaceable
+>&lt;значение-параметра&gt;</replaceable
+></option
+></term>
+<listitem
+><para
+>Позволяет перекрыть параметр <link linkend="configure-data"
+>файла конфигурации</link
+> для отдельного модуля. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Возобновление и остановка</title>
+<variablelist>
+
+<varlistentry id="cmdline-resume-from">
+<term
+><option
+><link linkend="cmdline-resume-from"
+>--resume-from</link
+></option
+> (или <option
+>--from</option
+> или <option
+>-f</option
+>) <replaceable
+>модуль</replaceable
+></term>
+<listitem
+><para
+>Возобновляет сборку, начиная с указанного модуля. Другие имена модулей в командной строке указывать не следует. </para>
+
+<note
+><para
+>Чтобы при возобновлении не обновлять исходный код, добавьте к остальным параметрам <option
+>--no-src</option
+>. </para
+></note>
+
+<para
+>Смотрите также <link linkend="cmdline-resume-after"
+>--resume-after</link
+> и <xref linkend="resuming-failed"/>. Этот параметр подходит, если вы устранили ошибку сборки и хотите, чтобы &kdesrc-build; завершил сборку.</para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-resume-after">
+<term
+><option
+><link linkend="cmdline-resume-after"
+>--resume-after</link
+></option
+> (или <option
+>--after</option
+> или <option
+>-a</option
+>) <replaceable
+>модуль</replaceable
+></term>
+<listitem
+><para
+>Возобновляет сборку, начиная с модуля после указанного. Другие имена модулей в командной строке указывать не следует. </para>
+
+<note
+><para
+>Чтобы при возобновлении не обновлять исходный код, добавьте к остальным параметрам <option
+><userinput
+>--no-src</userinput
+></option
+>. </para
+></note>
+
+<para
+>Смотрите также <link linkend="cmdline-resume-from"
+>--resume-from</link
+> и <xref linkend="resuming-failed"/>. Этот параметр подходит, если вы устранили ошибку, сами собрали и установили модуль и хотите, чтобы &kdesrc-build; продолжил со следующего модуля.</para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-resume">
+<term
+><option
+><link linkend="cmdline-resume"
+>--resume</link
+></option
+></term>
+<listitem
+><para
+>Этот параметр используется для запуска &kdesrc-build; после сбоя сборки. </para
+><para
+>Он возобновляет сборку с модуля, на котором произошёл сбой, по прежнему списку ожидавших сборки модулей и отключает обновление исходного кода и метаданных. Это удобно, когда сбой вызван простой ошибкой или недостающей зависимостью: исправив её, можно быстро вернуться к сборке прежних модулей, не возясь с <option
+><link linkend="cmdline-resume-from"
+>--resume-from</link
+></option
+> и <option
+><link linkend="cmdline-stop-before"
+>--stop-before</link
+></option
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-stop-before">
+<term
+><option
+><link linkend="cmdline-stop-before"
+>--stop-before</link
+></option
+> (или <option
+>--until</option
+>) <replaceable
+>модуль</replaceable
+></term>
+<listitem
+><para
+>Останавливает обычную сборку непосредственно <emphasis
+>перед</emphasis
+> сборкой указанного модуля. </para
+><para
+>Например, если обычный список сборки — <simplelist type="inline"
+> <member
+>moduleA</member
+><member
+>moduleB</member
+><member
+>moduleC</member
+></simplelist
+>, то с <option
+>--stop-before <replaceable
+>moduleB</replaceable
+></option
+> &kdesrc-build; соберёт только <literal
+>moduleA</literal
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-stop-after">
+<term
+><option
+><link linkend="cmdline-stop-after"
+>--stop-after</link
+></option
+> (или <option
+>--to</option
+>) <replaceable
+>модуль</replaceable
+></term>
+<listitem
+><para
+>Останавливает обычную сборку сразу <emphasis
+>после</emphasis
+> сборки указанного модуля. </para
+><para
+>Например, если обычный список сборки — <simplelist type="inline"
+> <member
+>moduleA</member
+><member
+>moduleB</member
+><member
+>moduleC</member
+></simplelist
+>, то с <option
+>--stop-after <replaceable
+>moduleB</replaceable
+></option
+> &kdesrc-build; соберёт <literal
+>moduleA</literal
+> и <literal
+>moduleB</literal
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-stop-on-failure">
+<term
+><option
+><link linkend="cmdline-stop-on-failure"
+>--stop-on-failure</link
+></option
+>, <option
+>--no-stop-on-failure</option
+></term>
+<listitem
+><para
+>Определяет, прерывать ли сборку при первом сбое. По умолчанию действует --stop-on-failure. Это можно изменить, чтобы продолжать сборку остальных модулей и не терять время, если проблема только в одном модуле. </para
+><para
+>Смотрите также параметр файла конфигурации <link linkend="conf-stop-on-failure"
+>stop-on-failure</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-rebuild-failures">
+<term
+><option
+><link linkend="cmdline-rebuild-failures"
+>--rebuild-failures</link
+></option
+></term>
+<listitem
+><para
+>Собирает только модули, которые не собрались при предыдущем запуске &kdesrc-build;. Полезно, если сбоев было много вперемешку с успешными сборками: устранив причину, можно легко собрать только модули, не собравшиеся в прошлый раз.</para>
+
+<note
+><para
+>Список <quote
+>ранее не собравшихся модулей</quote
+> сбрасывается при каждом запуске &kdesrc-build;, завершившемся сбоями модулей. Полностью успешная сборка его не сбрасывает, так что после успешной пересборки одного-двух модулей флаг продолжит работать.</para
+></note>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Сведения о модулях</title>
+<variablelist>
+
+<varlistentry id="cmdline-query">
+<term
+><option
+><link linkend="cmdline-query"
+>--query</link
+></option
+> <userinput
+><replaceable
+>режим</replaceable
+></userinput
+></term>
+<listitem
+><para
+>Заставляет &kdesrc-build; запросить параметр модулей из списка сборки (переданных в командной строке или прочитанных из файла конфигурации) и вывести результат на экран (по модулю в строке).</para>
+
+<para
+>Параметру нужно указать <quote
+>режим</quote
+> — одно из следующих значений:</para>
+    <itemizedlist>
+    <listitem
+><para
+><parameter
+>source-dir</parameter
+> — &kdesrc-build; выводит полный путь к исходному коду модуля; </para
+></listitem>
+    <listitem
+><para
+><parameter
+>build-dir</parameter
+> — &kdesrc-build; выводит полный путь к месту сборки модуля; </para
+></listitem>
+    <listitem
+><para
+><parameter
+>install-dir</parameter
+> — &kdesrc-build; выводит полный путь, куда будет установлен модуль; </para
+></listitem>
+    <listitem
+><para
+><parameter
+>project-path</parameter
+> — &kdesrc-build; выводит положение модуля в иерархии репозиториев исходного кода KDE (подробнее об иерархии — в <xref linkend="kde-projects-module-sets"/>); </para
+></listitem>
+    <listitem
+><para
+><parameter
+>branch</parameter
+> — &kdesrc-build; выводит определённую для каждого модуля ветвь git с учётом действующих <link linkend="conf-tag"
+>tag</link
+>, <link linkend="conf-branch"
+>branch</link
+> и <link linkend="conf-branch-group"
+>branch-group</link
+>; </para
+></listitem>
+    <listitem
+><para
+><parameter
+>module-set</parameter
+> — &kdesrc-build; выводит имя набора модулей, в который входит модуль. Можно использовать для создания кэша автодополнения zsh; </para
+></listitem>
+    <listitem
+><para
+><parameter
+>build-system</parameter
+> — &kdesrc-build; выводит имя системы сборки, определённой для модуля. Полезно для отладки автоматического определения системы сборки или при разработке тестов для конкретных систем сборки; </para
+></listitem>
+    <listitem
+><para
+>любое имя параметра, допустимое для модулей в <link linkend="conf-options-table"
+>файле конфигурации</link
+>. </para
+></listitem>
+    </itemizedlist>
+
+<informalexample>
+<para
+>Например, команда <userinput
+><command
+>kdesrc-build</command
+> <option
+>--query</option
+> <option
+>branch</option
+> <replaceable
+>kactivities</replaceable
+> <replaceable
+>kdepim</replaceable
+></userinput
+> может вывести:</para>
+<screen
+>kactivities: master
+kdepim: master
+</screen>
+</informalexample>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-dependency-tree">
+<term
+><option
+><link linkend="cmdline-dependency-tree"
+>--dependency-tree</link
+></option
+></term>
+<listitem>
+<para
+>Выводит сведения о зависимостях собираемых модулей в виде (рекурсивного) дерева, включая то, от какого коммита, ветви или метки зависит модуль и будет ли собираться зависимость. Для приложений с множеством зависимостей вывод может быть очень большим. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-dependency-tree-fullpath">
+<term
+><option
+><link linkend="cmdline-dependency-tree-fullpath"
+>--dependency-tree-fullpath</link
+></option
+></term>
+<listitem>
+<para
+>Выводит сведения о зависимостях собираемых модулей в виде (рекурсивного) дерева с полными путями. Для приложений с множеством зависимостей вывод может быть очень большим. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-list-installed">
+<term
+><option
+><link linkend="cmdline-list-installed"
+>--list-installed</link
+></option
+></term>
+<listitem>
+<para
+>Выводит установленные модули и завершает работу. Можно использовать для создания автодополнения параметра --run. </para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Исключение отдельных действий</title>
+<variablelist>
+
+<varlistentry id="cmdline-no-metadata">
+<term
+><option
+><link linkend="cmdline-no-metadata"
+>--no-metadata</link
+></option
+> (или <option
+>-M</option
+>)</term>
+<listitem
+><para
+>Не загружать автоматически дополнительные метаданные, нужные модулям git &kde;. Исходный код самих модулей всё равно обновляется, если не указан также <link linkend="cmdline-no-src"
+>--no-src</link
+>. </para
+><para
+>Полезно при частых повторных запусках &kdesrc-build;, поскольку метаданные меняются нечасто. Но многим другим возможностям метаданные нужны, так что стоит один раз запустить &kdesrc-build; с параметром <link linkend="cmdline-metadata-only"
+>--metadata-only</link
+>, а при последующих запусках использовать этот параметр. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-no-src">
+<term
+><option
+><link linkend="cmdline-no-src"
+>--no-src</link
+></option
+> (или <option
+>-S</option
+>)</term>
+<listitem
+><para
+>Не обращаться к серверу &git;. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-no-build">
+<term
+><option
+><link linkend="cmdline-no-build"
+>--no-build</link
+></option
+></term>
+<listitem
+><para
+>Пропустить сборку. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-no-install">
+<term
+><option
+><link linkend="cmdline-no-install"
+>--no-install</link
+></option
+></term>
+<listitem
+><para
+>Не устанавливать пакеты автоматически после сборки. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Только отдельные действия</title>
+<variablelist>
+
+<varlistentry id="cmdline-metadata-only">
+<term
+><option
+><link linkend="cmdline-metadata-only"
+>--metadata-only</link
+></option
+></term>
+<listitem
+><para
+>Только загрузить метаданные. Обычно &kdesrc-build; делает это автоматически, но вручную это может понадобиться, чтобы работал параметр командной строки <option
+><link linkend="cmdline-pretend"
+>--pretend</link
+></option
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-src-only">
+<term
+><option
+><link linkend="cmdline-src-only"
+>--src-only</link
+></option
+> (или <option
+>-s</option
+>)</term>
+<listitem
+><para
+>Только обновить исходный код. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-build-only">
+<term
+><option
+><link linkend="cmdline-build-only"
+>--build-only</link
+></option
+></term>
+<listitem
+><para
+>Только выполнить сборку. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-install-only">
+<term
+><option
+><link linkend="cmdline-install-only"
+>--install-only</link
+></option
+></term>
+<listitem
+><para
+>Если это единственный параметр командной строки, сценарий пытается установить все модули из <filename
+>log/latest/build-status</filename
+>. Всё, что указано после этого параметра, считается модулями для установки (даже если при последнем запуске они не собрались). </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-build-system-only">
+<term
+><option
+><link linkend="cmdline-build-system-only"
+>--build-system-only</link
+></option
+></term>
+<listitem
+><para
+>С этим параметром &kdesrc-build; прерывает сборку модуля непосредственно перед запуском команды <command
+>make</command
+>. Поддерживается только для совместимости со старыми версиями; для текущей системы сборки &kde; пользы от него нет. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Поведение сборки</title>
+<variablelist>
+
+<varlistentry id="cmdline-build-when-unchanged">
+<term
+><option
+><link linkend="cmdline-build-when-unchanged"
+>--build-when-unchanged</link
+></option
+> (или <option
+>--force-build</option
+>), <option
+>--no-build-when-unchanged</option
+> (или <option
+>--no-force-build</option
+>)</term>
+<listitem
+><para
+>Включение этого параметра явно запрещает пропускать сборку (оптимизация, управляемая параметром <link linkend="conf-build-when-unchanged"
+>build-when-unchanged</link
+>). Полезно, чтобы &kdesrc-build; выполнил сборку, когда вы изменили то, что &kdesrc-build; проверить не может. Параметр включён по умолчанию.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-refresh-build">
+<term
+><option
+><link linkend="cmdline-refresh-build"
+>--refresh-build</link
+></option
+> (или <option
+>-r</option
+>)</term>
+<listitem
+><para
+>Создать систему сборки заново и собрать с нуля. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-reconfigure">
+<term
+><option
+><link linkend="cmdline-reconfigure"
+>--reconfigure</link
+></option
+></term>
+<listitem
+><para
+>Повторно запустить <command
+>cmake</command
+> (для модулей &kde;) или <command
+>configure</command
+> (для &Qt;), не очищая каталог сборки. Обычно указывать это не нужно: &kdesrc-build; замечает изменение соответствующих параметров и сам перезапускает настройку сборки. Подразумевается при <parameter
+><link linkend="cmdline-refresh-build"
+>--refresh-build</link
+></parameter
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-install-dir">
+<term
+><option
+><link linkend="cmdline-install-dir"
+>--install-dir</link
+> <replaceable
+>путь</replaceable
+></option
+></term>
+<listitem
+><para
+>Позволяет изменить каталог установки модулей. Подразумевает <link linkend="cmdline-reconfigure"
+><option
+>--reconfigure</option
+></link
+>, но может понадобиться и <link linkend="cmdline-refresh-build"
+><option
+>--refresh-build</option
+></link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-generate-vscode-project-config">
+<term
+><option
+><link linkend="cmdline-generate-vscode-project-config"
+>--generate-vscode-project-config</link
+></option
+>, <option
+>--no-generate-vscode-project-config</option
+></term>
+<listitem
+><para
+>Создать каталог <filename
+>.vscode</filename
+> с конфигурацией для сборки и отладки в Visual Studio Code. По умолчанию параметр отключён. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Работа сценария</title>
+<variablelist>
+
+<varlistentry id="cmdline-async">
+<term
+><option
+><link linkend="cmdline-async"
+>--async</link
+></option
+>, <option
+>--no-async</option
+></term>
+<listitem
+><para
+>Включает или отключает <link linkend="conf-async"
+>асинхронный режим</link
+>, в котором обновление исходного кода и сборка модулей идут одновременно. При отключении всё обновление выполняется до начала сборки, что замедляет весь процесс. Если при работе &kdesrc-build; возникают ошибки IPC, попробуйте отключить этот режим и отправьте <ulink url="https://bugs.kde.org/"
+>сообщение об ошибке</ulink
+>. Параметр включён по умолчанию. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-color">
+<term
+><option
+><link linkend="cmdline-color"
+>--color</link
+></option
+> (или <option
+>--colorful-output</option
+>), <option
+>--no-color</option
+> (или <option
+>--no-colorful-output</option
+>)</term>
+<listitem
+><para
+>Включить или отключить цветной вывод. По умолчанию для интерактивных терминалов он включён. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-nice">
+<term
+><option
+><link linkend="cmdline-nice"
+>--nice</link
+></option
+> (или <option
+>--niceness</option
+>) <replaceable
+>значение</replaceable
+></term>
+<listitem
+><para
+>Задаёт приоритет процессора, запрашиваемый &kdesrc-build;, в диапазоне 0–20. 0 — наивысший приоритет (наименее <quote
+>уступчивый</quote
+>), 20 — наинизший. По умолчанию 10. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-rc-file">
+<term
+><option
+><link linkend="cmdline-rc-file"
+>--rc-file</link
+></option
+> <replaceable
+>файл</replaceable
+></term>
+<listitem
+><para
+>Файл, из которого читаются параметры конфигурации. По умолчанию — <filename
+>kdesrc-buildrc</filename
+> (ищется в текущем рабочем каталоге). Если его нет, используется <filename
+>~/.config/kdesrc-buildrc</filename
+> (или <filename
+>$XDG_CONFIG_HOME/kdesrc-buildrc</filename
+>, если задана <envar
+>$XDG_CONFIG_HOME</envar
+>). Смотрите также <xref linkend="kdesrc-buildrc"/>. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Настройка</title>
+<variablelist>
+
+<varlistentry id="cmdline-initial-setup">
+<term
+><option
+><link linkend="cmdline-initial-setup"
+>--initial-setup</link
+></option
+></term>
+<listitem
+><para
+>&kdesrc-build; выполняет однократную начальную настройку, нужную для работы &kdesrc-build; и запуска вновь установленных программ &kde;. </para>
+<para
+>Сюда входит:</para>
+<itemizedlist>
+<listitem
+><para
+>установка известных зависимостей (в поддерживаемых дистрибутивах &Linux;);</para
+></listitem>
+<listitem
+><para
+>добавление нужных переменных окружения в <literal
+>~/.bashrc</literal
+>.</para
+></listitem>
+</itemizedlist>
+<para
+>Полностью равнозначно одновременному использованию <option
+><link linkend="cmdline-install-distro-packages"
+>--install-distro-packages</link
+></option
+> <option
+><link linkend="cmdline-generate-config"
+>--generate-config</link
+></option
+>. В kdesrc-build (реализации на perl) дополнительно используется «--install-distro-packages-perl». </para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-install-distro-packages">
+<term
+><option
+><link linkend="cmdline-install-distro-packages"
+>--install-distro-packages</link
+></option
+></term>
+<listitem
+><para
+>Устанавливает пакеты дистрибутива (в поддерживаемых дистрибутивах &Linux;), нужные для работы &kdesrc-build; и запуска вновь установленных программ &kde;. </para>
+<para
+>Смотрите также <option
+><link linkend="cmdline-initial-setup"
+>--initial-setup</link
+></option
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-generate-config">
+<term
+><option
+><link linkend="cmdline-generate-config"
+>--generate-config</link
+></option
+></term>
+<listitem
+><para
+>Создаёт файл конфигурации &kdesrc-build;. </para>
+<para
+>Смотрите также <option
+><link linkend="cmdline-initial-setup"
+>--initial-setup</link
+></option
+></para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Уровень подробности</title>
+ 
+<variablelist>
+
+<varlistentry id="cmdline-debug">
+<term
+><option
+><link linkend="cmdline-debug"
+>--debug</link
+></option
+></term>
+<listitem
+><para
+>Включает режим отладки сценария. Сейчас это означает, что весь вывод, помимо обычной записи в каталог журналов, выводится и на стандартный вывод. Кроме того, в режиме отладки многие функции подробнее сообщают о своих действиях. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-quiet">
+<term
+><option
+><link linkend="cmdline-quiet"
+>--quiet</link
+></option
+> (или <option
+>--quite</option
+> или <option
+>-q</option
+>)</term>
+<listitem
+><para
+>Выводить меньше: с этим ключом выводится только самое основное. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-really-quiet">
+<term
+><option
+><link linkend="cmdline-really-quiet"
+>--really-quiet</link
+></option
+></term>
+<listitem
+><para
+>Выводить только предупреждения и ошибки. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-verbose">
+<term
+><option
+><link linkend="cmdline-verbose"
+>--verbose</link
+></option
+></term>
+<listitem
+><para
+>Очень подробно описывать происходящее и действия &kdesrc-build;. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Сведения о сценарии</title>
+<variablelist>
+
+<varlistentry id="cmdline-version">
+<term
+><option
+><link linkend="cmdline-version"
+>--version</link
+></option
+> (или <option
+>-v</option
+>)</term>
+<listitem
+><para
+>Показать версию программы. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-help">
+<term
+><option
+><link linkend="cmdline-help"
+>--help</link
+></option
+> (или <option
+>-h</option
+>)</term>
+<listitem
+><para
+>Показать только краткую справку по сценарию. </para
+></listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-show-info">
+<term
+><option
+><link linkend="cmdline-show-info"
+>--show-info</link
+></option
+></term>
+<listitem
+><para
+>Показывает сведения о &kdesrc-build; и операционной системе, полезные в сообщениях об ошибках и при обращении за помощью на форумах или в списках рассылки. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cmdline-show-options-specifiers">
+<term
+><option
+><link linkend="cmdline-show-options-specifiers"
+>--show-options-specifiers</link
+></option
+></term>
+<listitem
+><para
+>Выводит строки описания (в формате GetOpts::Long) для всех поддерживаемых сценарием параметров командной строки. Может пригодиться разработчикам, например для создания функций автодополнения zsh. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+</sect1>

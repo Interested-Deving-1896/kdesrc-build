@@ -1,0 +1,181 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<sect1 id="environment">
+<title
+>Настройка окружения для запуска рабочего стола &kde; &plasma;</title>
+
+<para
+>Если &kde; &plasma; собирается под отдельным пользователем, а в системе уже установлена &plasma;, запустить новую &plasma; может быть непросто: новая &plasma; должна иметь приоритет над старой. Нужно изменить переменные окружения в сценариях входа, чтобы использовался только что собранный рабочий стол. </para>
+
+<sect2 id="session-driver">
+<title
+>Автоматическая установка драйвера входа</title>
+
+<para
+>Начиная с версии 1.16 &kdesrc-build; пытается установить подходящий драйвер входа, позволяющий входить в рабочий стол &kde;, собранный &kdesrc-build;, из диспетчера входа. Это отключается параметром файла конфигурации <option
+><link linkend="conf-install-session-driver"
+>install-session-driver</link
+></option
+>.</para>
+
+<note
+><para
+>В режиме имитации (pretend) &kdesrc-build; сеанс не настраивает.</para
+></note>
+
+<para
+>Драйвер работает, настраивая пользовательский тип сеанса <quote
+><literal
+>xsession</literal
+></quote
+>. Такой сеанс должен по умолчанию работать с диспетчером входа sddm (где он называется <quote
+>Custom</quote
+>), а другим диспетчерам входа (например, <application
+>LightDM</application
+> и <application
+>gdm</application
+>) для поддержки <literal
+>xsession</literal
+> могут понадобиться дополнительные файлы.</para>
+
+<sect3 id="xsession-distribution-setup">
+<title
+>Поддержка xsession в дистрибутивах</title>
+
+<para
+>Для поддержки входа через <literal
+>xsession</literal
+> диспетчерам входа некоторых дистрибутивов нужны дополнительные пакеты.</para>
+
+<itemizedlist>
+<listitem
+><para
+>Дистрибутиву &Linux; <ulink url="https://getfedora.org/"
+>Fedora</ulink
+> для входа через пользовательский <literal
+>xsession</literal
+> нужен пакет <literal
+>xorg-x11-xinit-session</literal
+>.</para
+></listitem>
+
+<listitem
+><para
+><ulink url="https://www.debian.org/"
+>Debian</ulink
+> и производные от него дистрибутивы &Linux; должны поддерживать вход через пользовательский <literal
+>xsession</literal
+>, но в <filename
+>/etc/X11/Xsession.options</filename
+> должен быть задан параметр <option
+><userinput
+>allow-user-xsession</userinput
+></option
+>. Смотрите также <ulink url="https://www.debian.org/doc/manuals/debian-reference/ch07.en.html#_customizing_the_x_session_classic_method"
+>документацию Debian о настройке сеанса X</ulink
+>.</para
+></listitem>
+
+<listitem
+><para
+>Для других дистрибутивов смотрите <xref linkend="xsession-manual-setup"/>.</para
+></listitem>
+</itemizedlist>
+
+</sect3>
+
+<sect3 id="xsession-manual-setup">
+<title
+>Ручное добавление поддержки xsession</title>
+
+<para
+>Если для вашего дистрибутива в <xref linkend="xsession-distribution-setup"/> нет указаний, вход <quote
+>Custom xsession login</quote
+> можно добавить в список типов сеансов вручную:</para>
+
+<procedure id="proc-adding-xsession-type">
+<title
+>Добавление типа сеанса входа .xsession.</title>
+
+<note
+><para
+>Скорее всего, для этого понадобятся права администратора. </para
+></note>
+
+<step performance="required">
+<para
+>Создайте файл <filename
+>/usr/share/xsessions/kdesrc-build.desktop</filename
+>.</para>
+</step>
+
+<step performance="required">
+<para
+>Поместите в него следующий текст:</para>
+<literallayout
+><userinput>
+Type=XSession
+Exec=<co id="session-homedir"/><replaceable
+>$HOME</replaceable
+>/.xsession
+Name=KDE Plasma Desktop (unstable; kdesrc-build)
+</userinput
+></literallayout>
+
+<calloutlist>
+<callout arearefs="session-homedir"
+><para
+>Вместо <replaceable
+>$HOME</replaceable
+> укажите полный путь к домашнему каталогу (например, <filename class="directory"
+>/home/<replaceable
+>user</replaceable
+></filename
+>). Спецификация desktop-файлов не допускает файлов, общих для любых пользователей. </para
+></callout>
+
+</calloutlist>
+</step>
+
+<step performance="optional"
+><para
+>После перезапуска диспетчер входа покажет в списке сеансов новый тип <quote
+>KDE Plasma Desktop (unstable; kdesrc-build)</quote
+>; если выбрать его при входе, будет запущен файл <filename
+>.xsession</filename
+>, установленный &kdesrc-build;.</para>
+
+<note
+><para
+>Если диспетчер входа не отслеживает изменения каталога <filename class="directory"
+>/usr/share/xsessions</filename
+>, проще всего перезагрузить компьютер.</para
+></note>
+
+</step>
+
+</procedure>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="old-profile-instructions">
+<title
+>Ручная настройка окружения</title>
+<para
+>Раньше здесь описывалось, какие переменные окружения задать для запуска собранного рабочего стола. Эти указания перенесены в приложение (<xref linkend="old-profile-setup"/>).</para>
+
+<para
+>Если вы собираетесь настроить вход сами, обратитесь к этому приложению или к файлу <filename
+>kde-env-master.sh.in</filename
+> из исходного кода &kdesrc-build;.</para>
+
+</sect2>
+
+</sect1>

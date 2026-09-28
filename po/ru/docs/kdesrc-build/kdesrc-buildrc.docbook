@@ -1,0 +1,376 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<chapter id="kdesrc-buildrc">
+<title
+>Настройка &kdesrc-build;</title>
+
+<sect1 id="kdesrc-buildrc-overview">
+<title
+>Обзор конфигурации &kdesrc-build;</title>
+
+<para
+>Для работы сценария в домашнем каталоге должен быть файл <filename
+>.kdesrc-buildrc</filename
+> с описанием загружаемых и собираемых модулей и их параметров. </para>
+
+<sect2 id="kdesrc-buildrc-layout">
+<title
+>Структура файла конфигурации</title>
+
+<sect3 id="kdesrc-buildrc-layout-global">
+<title
+>Глобальная конфигурация</title>
+
+<para
+>Файл конфигурации начинается с глобальных параметров, заданных так: </para>
+
+<programlisting
+>global
+<replaceable
+>option-name option-value</replaceable>
+<replaceable
+>[...]</replaceable>
+end global
+</programlisting>
+
+</sect3>
+<sect3 id="kdesrc-buildrc-layout-modules">
+<title
+>Конфигурация модулей</title>
+
+<para
+>Затем идёт один или несколько разделов модулей в одной из двух форм: </para>
+
+<itemizedlist>
+<listitem>
+<programlisting
+>module <replaceable
+>module-name</replaceable>
+<replaceable
+>option-name option-value</replaceable>
+<replaceable
+>[...]</replaceable>
+end module
+</programlisting>
+</listitem>
+
+<listitem>
+<programlisting
+>module-set <replaceable
+>module-set-name</replaceable>
+  repository <userinput
+>kde-projects</userinput
+> или <userinput
+><replaceable
+>git://host.org/path/to/repo.git</replaceable
+></userinput>
+  use-modules <replaceable
+>module-names</replaceable>
+
+# Можно задать и другие параметры
+<replaceable
+>option-name option-value</replaceable>
+<replaceable
+>[...]</replaceable>
+end module-set
+</programlisting>
+</listitem>
+</itemizedlist>
+
+<important
+><para
+>Вторая форма, наборы модулей, <emphasis
+>работает только для модулей на основе Git</emphasis
+>.</para
+></important>
+
+<para
+>Для модулей Git <replaceable
+>имя-модуля</replaceable
+> должно быть модулем из репозитория &git; &kde; (например, kdeartwork или kde-wallpapers). </para>
+
+<para
+>Для модулей Git имя модуля может быть по сути любым, лишь бы оно не повторяло другое имя модуля в конфигурации. Учтите, что без параметра <link linkend="conf-dest-dir"
+>dest-dir</link
+> структура каталогов исходного кода и сборки строится по имени модуля. </para>
+
+<para
+>Однако для <emphasis
+>наборов модулей</emphasis
+> Git <replaceable
+>имена-модулей</replaceable
+> должны соответствовать реальным модулям git в выбранном <option
+>repository</option
+>. Подробнее — в описании <link linkend="conf-git-repository-base"
+>git-repository-base</link
+> и <link linkend="conf-use-modules"
+>use-modules</link
+>. </para>
+
+</sect3>
+
+<sect3 id="kdesrc-buildrc-option-values">
+<title
+>Обработка значений параметров</title>
+
+<para
+>Как правило, всё содержимое строки после <replaceable
+>имени-параметра</replaceable
+> используется как <replaceable
+>значение-параметра</replaceable
+>.</para>
+
+<para
+>Единственное изменение, которое вносит &kdesrc-build;, — последовательность «<userinput
+>${<replaceable
+>имя-параметра</replaceable
+>}</userinput
+>» заменяется значением этого параметра из глобальной конфигурации. Так можно ссылаться на значения существующих параметров, в том числе уже заданных &kdesrc-build;.</para>
+
+<para
+>Пример — в <xref linkend="make-options-example"/>.</para>
+
+<para
+>Можно вводить и собственные нестандартные глобальные переменные, чтобы ссылаться на них дальше в конфигурации. Для этого имя параметра начинается со знака подчёркивания. Пример: <example id="custom-global-option-example">
+<title
+>Собственный глобальный параметр для ссылок в конфигурации</title>
+<programlisting
+>global
+  _ver 6  # ← собственная переменная (начинается с подчёркивания)
+  _kde ~/kde${_ver}  # ← собственная переменная может содержать другую заданную переменную
+  source-dir ${_kde}/src  # ← вложенная переменная (_kde → _ver) тоже раскрывается
+end global
+
+options kdepim
+  log-dir /custom/path/logs${_ver} # ← собственную переменную можно использовать как стандартную
+end options
+</programlisting>
+</example>
+</para>
+
+</sect3>
+
+<sect3 id="kdesrc-buildrc-options-groups">
+<title
+>Модули <quote
+>options</quote
+></title>
+
+<para
+>Последний вид записей файла конфигурации — группы <literal
+>options</literal
+>, которые можно указывать везде, где допустимы <literal
+>module</literal
+> или <literal
+>module-set</literal
+>.</para>
+
+<programlisting
+>options <replaceable
+>module-name</replaceable>
+<replaceable
+>option-name option-value</replaceable>
+<replaceable
+>[...]</replaceable>
+end options
+</programlisting>
+
+<para
+>В группе <literal
+>options</literal
+> задаются параметры так же, как в описании модуля, и она связана с существующим модулем. Заданные так параметры <emphasis
+>перекрывают</emphasis
+> параметры связанного модуля.</para>
+
+<important
+><para
+>Имя связанного модуля <emphasis
+>должно</emphasis
+> совпадать с именем в описании <literal
+>options</literal
+>. Внимательно следите за опечатками.</para
+></important>
+
+<para
+>Это позволяет описать целый <literal
+>module-set</literal
+> модулей с одинаковыми параметрами, а затем вносить отдельные изменения группами <literal
+>options</literal
+>.</para>
+
+<para
+>Группы <literal
+>options</literal
+> применимы и к именованным наборам модулей. Опытные пользователи могут взять за основу общий файл конфигурации (с описаниями <literal
+>module-set</literal
+>), а затем менять параметры этих наборов в файлах конфигурации, подключающих основу командой <literal
+><link linkend="kdesrc-buildrc-including"
+>include</link
+></literal
+>.</para>
+
+<example id="ex-options-group">
+<title
+>Пример использования options</title>
+
+<para
+>В этом примере собираются все модули группы мультимедийных программ &kde;, но нужна другая версия приложения &kmix; (например, для проверки исправления). Это делается так:</para>
+
+<programlisting
+>module-set <replaceable
+>kde-multimedia-set</replaceable>
+  repository <userinput
+>kde-projects</userinput>
+  use-modules <replaceable
+>kde/kdemultimedia</replaceable>
+  branch <replaceable
+>master</replaceable>
+end module-set
+
+# kmix входит в группу kde/kdemultimedia; хотя выше kmix нигде
+# не упоминался, &kdesrc-build; разберётся с изменением.
+options <replaceable
+>kmix</replaceable>
+  branch <replaceable
+>KDE/4.12</replaceable>
+end options
+</programlisting>
+
+<para
+>Теперь при запуске &kdesrc-build; все мультимедийные программы &kde; собираются из ветви <quote
+>master</quote
+> репозитория, а &kmix; — из более старой ветви <quote
+>KDE/4.12</quote
+>. Благодаря <literal
+>options</literal
+> не пришлось перечислять все <emphasis
+>остальные</emphasis
+> мультимедийные программы &kde;, чтобы задать им нужную ветвь.</para>
+
+</example>
+
+<note>
+<para
+>Эта возможность доступна в &kdesrc-build; начиная с версии 1.16 или в разрабатываемой версии &kdesrc-build; после 12.01.2014.</para
+></note>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="kdesrc-buildrc-including">
+<title
+>Подключение других файлов конфигурации</title>
+
+<para
+>В файле конфигурации можно подключать другие файлы ключевым словом <literal
+>include</literal
+> — как если бы подключённый файл был вставлен в это место. </para>
+
+<informalexample
+><para
+>Например, так:</para>
+<programlisting
+>global
+    include <replaceable
+>~/common-kdesrc-build-options</replaceable>
+
+    # Здесь особые параметры.
+
+end global
+</programlisting>
+</informalexample>
+
+<note
+><para
+>Если полный путь к подключаемому файлу не указан, файл ищется начиная с каталога, где лежит подключающий файл. Это работает и рекурсивно.</para
+></note>
+
+<para
+>В значении инструкции include можно использовать переменные:</para>
+<programlisting
+>global
+  <replaceable
+>_ver</replaceable
+> <replaceable
+>6</replaceable>
+  source-dir ~/kde<replaceable
+>${_ver}</replaceable
+>/src
+  ...
+  persistent-data-file ~/kde<replaceable
+>${_ver}</replaceable
+>/persistent-options.json
+end global
+
+include ~/kde6/src/kdesrc-build/data/build-include/kf<replaceable
+>${_ver}</replaceable
+>-qt<replaceable
+>${_ver}</replaceable
+>.ksb
+
+</programlisting>
+</sect2>
+
+<sect2 id="kdesrc-buildrc-common">
+<title
+>Часто используемые параметры конфигурации</title>
+
+<para
+>Ниже — часто используемые параметры. Щёлкните по параметру, чтобы узнать о нём подробнее. Полный список — в <xref linkend="conf-options-table"/>. </para>
+
+<itemizedlist>
+<listitem
+><para
+><link linkend="conf-cmake-options"
+>cmake-options</link
+> — флаги настройки модуля через &cmake;;</para
+></listitem>
+<listitem
+><para
+><link linkend="conf-branch"
+>branch</link
+> — получение из другой ветви вместо <literal
+>master</literal
+>;</para
+></listitem>
+<listitem
+><para
+><link linkend="conf-configure-flags"
+>configure-flags</link
+> — флаги настройки &Qt;;</para
+></listitem>
+<listitem
+><para
+><link linkend="conf-install-dir"
+>install-dir</link
+> — каталог установки &kde;;</para
+></listitem>
+<listitem
+><para
+><link linkend="conf-make-options"
+>make-options</link
+> — параметры программы &make; (например, число используемых процессоров);</para
+></listitem>
+<listitem
+><para
+><link linkend="conf-qt-install-dir"
+>qt-install-dir</link
+> — каталог установки &Qt;;</para
+></listitem>
+<listitem
+><para
+><link linkend="conf-source-dir"
+>source-dir</link
+> — куда загружать исходный код.</para
+></listitem>
+</itemizedlist>
+
+</sect2>
+</sect1
+>&conf-options-table; </chapter>

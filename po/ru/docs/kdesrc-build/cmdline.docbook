@@ -1,0 +1,156 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<chapter id="cmdline">
+<title
+>Параметры командной строки и переменные окружения</title>
+
+<sect1 id="cmdline-usage">
+<title
+>Использование командной строки</title>
+
+<para
+>&kdesrc-build; запускается так:</para>
+
+<cmdsynopsis
+><command
+>kdesrc-build</command
+> <arg rep="repeat"
+><replaceable
+>--параметры</replaceable
+></arg
+> <arg rep="repeat"
+><replaceable
+>собираемые модули</replaceable
+></arg
+> </cmdsynopsis>
+
+<para
+>Если в командной строке модули не указаны, kdesrc-build соберёт все модули из файла конфигурации в том порядке, в каком они там перечислены (хотя порядок могут изменить различные параметры файла конфигурации).</para>
+
+<sect2 id="cmdline-usage-options">
+<title
+>Часто используемые параметры командной строки</title>
+
+<para
+>Полный список параметров командной строки приведён в <xref linkend="supported-cmdline-params"/>. Чаще всего используются:</para>
+
+<variablelist>
+  <varlistentry>
+    <term
+><option
+>--pretend</option
+> (или <option
+>-p</option
+>)</term>
+    <listitem
+><para
+>С этим параметром &kdesrc-build; сообщает, что он сделал бы, не выполняя этого на самом деле. Удобно, чтобы убедиться, что будут собраны именно те модули, которые вы рассчитываете собрать.</para
+></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term
+><option
+>--refresh-build</option
+></term>
+    <listitem
+><para
+>Этот параметр заставляет &kdesrc-build; собрать указанные модули совершенно заново: существующий каталог сборки модуля удаляется, и модуль пересобирается. Полезно при ошибках сборки модуля; иногда это необходимо при изменении библиотек &Qt; или &kde;.</para
+></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term
+><option
+>--no-src</option
+></term>
+    <listitem
+><para
+>Этот параметр пропускает обновление исходного кода. Пригодится, если код обновлялся совсем недавно (вручную или при недавнем запуске &kdesrc-build;), а пересобрать некоторые модули всё же нужно.</para
+></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term
+><option
+>--no-build</option
+></term>
+    <listitem
+><para
+>Этот параметр похож на описанный выше <option
+>--no-src</option
+>, но пропускается сборка.</para
+></listitem>
+  </varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="cmdline-usage-modules">
+<title
+>Указание собираемых модулей</title>
+
+<para
+>Как правило, чтобы указать собираемые модули, достаточно передать их имена в том виде, в каком они заданы в файле конфигурации. Можно указывать и модули из наборов модулей — по именам из <link linkend="conf-use-modules"
+>use-modules</link
+> — или имя всего набора, если оно задано.</para>
+
+<para
+>Для наборов модулей на основе <link linkend="kde-projects-module-sets"
+>базы данных проектов KDE</link
+> &kdesrc-build; разворачивает составные части имени, чтобы определить нужный модуль. Например, запись &kdesrc-build; в базе проектов KDE указывает на <literal
+>extragear/utils/kdesrc-build</literal
+>. Чтобы собрать &kdesrc-build;, можно указать любой из вариантов:</para>
+
+<informalexample>
+<screen
+><prompt
+>&percnt;</prompt
+> <command
+>kdesrc-build</command
+> <option
+><replaceable
+>+extragear/utils/kdesrc-build</replaceable
+></option>
+<prompt
+>&percnt;</prompt
+> <command
+>kdesrc-build</command
+> <option
+><replaceable
+>+utils/kdesrc-build</replaceable
+></option>
+<prompt
+>&percnt;</prompt
+> <command
+>kdesrc-build</command
+> <option
+><replaceable
+>+kdesrc-build</replaceable
+></option
+>
+</screen>
+</informalexample>
+
+<note
+><para
+>В командах предыдущего примера перед именем модуля стоит <symbol
+>+</symbol
+>. Он заставляет трактовать имя как модуль из базы данных проектов KDE, даже если этот модуль не описан в файле конфигурации. </para
+></note>
+
+<para
+>Осторожнее с очень общими проектами (например, просто <literal
+>extragear/utils</literal
+>): это может привести к сборке множества модулей. Перед сборкой нового набора модулей используйте параметр <option
+>--pretend</option
+>, чтобы убедиться, что собираются только нужные модули.</para>
+
+</sect2>
+</sect1
+>&supported-envvars; &supported-cmdline-params; </chapter>

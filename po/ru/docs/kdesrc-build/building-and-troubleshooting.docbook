@@ -1,0 +1,171 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<sect1 id="building-and-troubleshooting">
+<title
+>Использование сценария &kdesrc-build;</title>
+<para
+>Когда конфигурация готова, можно запускать сценарий. Даже если вы хотите ещё что-то подстроить или почитать, стоит хотя бы загрузить метаданные проектов &kde;.</para>
+
+<sect2 id="loading-kdesrc-build-metadata">
+<title
+>Загрузка метаданных проектов</title>
+
+<para
+>В окне терминала войдите под пользователем, от имени которого компилируются программы &kde;, и запустите сценарий: </para>
+<screen
+><prompt
+>&percnt;</prompt
+> <userinput
+><command
+>kdesrc-build</command
+> <option
+>--metadata-only</option
+></userinput
+>
+</screen>
+
+<para
+>Эта команда подготовит каталог исходного кода и, подключившись к репозиториям &git; KDE, загрузит базу данных репозиториев git &kde; и базу метаданных зависимостей, ничего больше не меняя. Имеет смысл выполнить её отдельно: эти метаданные нужны другим командам &kdesrc-build;. </para>
+
+</sect2>
+
+<sect2 id="pretend-mode">
+<title
+>Предварительный просмотр действий kdesrc-build</title>
+
+<para
+>Когда метаданные проектов загружены, можно заранее посмотреть, что сделает &kdesrc-build; при запуске. Для этого служит параметр командной строки <option
+><link linkend="cmdline-pretend"
+>--pretend</link
+></option
+>.</para>
+
+<screen
+><prompt
+>&percnt; </prompt
+><command
+>./kdesrc-build</command
+> <option
+>--pretend</option
+>
+</screen>
+
+<para
+>Появится сообщение, что некоторые пакеты успешно собраны (хотя на самом деле ничего не собиралось). Если серьёзных проблем не показано, можно запускать сценарий по-настоящему.</para>
+
+<screen
+><prompt
+>&percnt;</prompt
+> <userinput
+><command
+>kdesrc-build</command
+></userinput
+>
+</screen>
+
+<para
+>Эта команда загрузит нужный исходный код, по очереди соберёт и установит каждый модуль. В итоге вывод будет похож на показанный в <xref linkend="example-build-sequence"/>:</para>
+
+<example id="example-build-sequence">
+<title
+>Пример вывода kdesrc-build</title>
+<screen
+><prompt
+>&percnt;</prompt
+> <userinput
+><command
+>kdesrc-build</command
+></userinput>
+Updating kde-build-metadata (to branch master)
+Updating sysadmin-repo-metadata (to branch master)
+
+Building libdbusmenu-qt (1/200)
+        No changes to libdbusmenu-qt source, proceeding to build.
+        Compiling... succeeded (after 0 seconds)
+        Installing.. succeeded (after 0 seconds)
+
+Building taglib (2/200)
+        Updating taglib (to branch master)
+        Source update complete for taglib: 68 files affected.
+        Compiling... succeeded (after 0 seconds)
+        Installing.. succeeded (after 0 seconds)
+
+Building extra-cmake-modules from &lt;module-set at line 32&gt; (3/200)
+        Updating extra-cmake-modules (to branch master)
+        Source update complete for extra-cmake-modules: 2 files affected.
+        Compiling... succeeded (after 0 seconds)
+        Installing.. succeeded (after 0 seconds)
+
+        ...
+
+Building kdevelop from kdev (200/200)
+        Updating kdevelop (to branch master)
+        Source update complete for kdevelop: 29 files affected.
+        Compiling... succeeded (after 1 minute, and 34 seconds)
+        Installing.. succeeded (after 2 seconds)
+
+&lt;&lt;&lt;  PACKAGES SUCCESSFULLY BUILT  &gt;&gt;&gt;
+Built 200 modules
+
+Your logs are saved in /home/kde-src/kdesrc/log/2018-01-20-07
+</screen>
+</example>
+</sect2>
+
+<sect2 id="fixing-build-failures">
+<title
+>Устранение сбоев сборки</title>
+
+<para
+>В зависимости от числа загружаемых модулей &kdesrc-build; может не справиться с первой компиляцией программ &kde;. Не отчаивайтесь! </para>
+
+<para
+>&kdesrc-build; записывает в журнал вывод каждой выполняемой команды. По умолчанию журналы хранятся в <filename class="directory"
+>~/kdesrc/log</filename
+>. Чтобы понять причину ошибки модуля при последнем запуске &kdesrc-build;, обычно достаточно заглянуть в <filename class="directory"
+>~/kdesrc/log/latest/<replaceable
+>имя-модуля</replaceable
+>/error.log</filename
+>.</para>
+
+<tip
+><para
+>Проще всего найти ошибку, из-за которой модуль не собрался, поиском без учёта регистра от конца файла назад по слову <literal
+>error</literal
+>. Найдя его, прокрутите выше и убедитесь, что рядом нет других сообщений об ошибках. Первое сообщение в группе обычно и указывает на исходную проблему.</para
+></tip>
+
+<para
+>В этом файле видна ошибка, из-за которой модуль не собрался. Если в конце файла сказано, что не хватает каких-то пакетов, установите их (включая соответствующие пакеты -dev) перед повторной сборкой модуля. При повторном запуске &kdesrc-build; обязательно передайте параметр <link linkend="cmdline-reconfigure"
+>--reconfigure</link
+>, чтобы &kdesrc-build; заставил модуль заново проверить наличие пакетов.</para>
+
+<para
+>Если же это ошибка сборки (синтаксическая ошибка, <quote
+>incorrect prototype</quote
+>, <quote
+>unknown type</quote
+> и т. п.), то, скорее всего, она в исходном коде &kde; и, будем надеяться, исправится в течение нескольких дней. Если нет — смело напишите о сбое сборки в список рассылки <email
+>kde-devel@kde.org</email
+> (возможно, сначала придётся подписаться).</para>
+
+<para
+>Другие типичные проблемы и их решения, а также общие советы по сборке программ &kde; приведены в руководстве <ulink url="https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source"
+>Build from Source</ulink
+>. </para>
+
+<para
+>Если же всё прошло хорошо, на компьютере появится новая установка &kde;, и остаётся лишь запустить её, как описано далее в <xref linkend="environment"/>.</para>
+
+<note
+><para
+>Подробнее о журналировании в &kdesrc-build; — в разделе <xref linkend="kdesrc-build-logging"/>.</para
+></note>
+</sect2>
+
+</sect1>

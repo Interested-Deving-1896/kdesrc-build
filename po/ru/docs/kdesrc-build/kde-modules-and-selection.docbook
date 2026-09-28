@@ -1,0 +1,528 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<sect1 id="kde-modules-and-selection">
+<title
+>Организация и выбор модулей</title>
+
+<sect2 id="kde-layers">
+<title
+>Организация программ KDE</title>
+
+<para
+>Программы &kde; разделены на компоненты, многие из которых умеет собирать &kdesrc-build;. Понимание этого устройства поможет правильно выбрать собираемые модули. </para>
+
+<orderedlist>
+<listitem
+><para
+>На нижнем уровне — библиотека &Qt;, очень мощный кроссплатформенный <quote
+>инструментарий</quote
+>. &kde; основана на &Qt;, и некоторые нужные &kde; библиотеки не из &kde; тоже основаны на &Qt;. &kdesrc-build; может собрать &Qt; или использовать уже установленную в системе, если её версия достаточно свежая.</para
+></listitem>
+
+<listitem
+><para
+>Над &Qt; — библиотеки, необходимые для работы программ &kde;. Некоторые из них из-за общего назначения не считаются частью самой &kde;, но всё же необходимы платформе &kde;. Они собраны в группу модулей <literal
+>kdesupport</literal
+>, но не считаются частью библиотек <quote
+>Frameworks</quote
+>.</para>
+</listitem>
+
+<listitem
+><para
+>Над ними — <ulink url="https://community.kde.org/Frameworks"
+>&kde; Frameworks</ulink
+> (иногда сокращённо KF5), основные библиотеки для рабочего стола &kde; Plasma, приложений &kde; и сторонних программ. </para
+> </listitem>
+
+<listitem
+><para
+>Над Frameworks располагается несколько разных вещей:</para>
+    <itemizedlist>
+        <listitem
+><para
+><quote
+>Сторонние</quote
+> приложения — использующие &kde; Frameworks или рассчитанные на &kde; Plasma, но созданные не проектом &kde; и не совместно с ним.</para
+></listitem>
+
+        <listitem
+><para
+>Plasma — полноценная рабочая среда (<quote
+>workspace</quote
+>). Именно её обычно видят пользователи, <quote
+>входя в &kde;</quote
+>.</para
+></listitem>
+
+        <listitem
+><para
+>Набор приложений &kde; — полезные программы, поставляемые с платформой и рабочим столом &plasma;, разбитые на модули: утилиты вроде &dolphin;, игры вроде <application
+>KSudoku</application
+>, офисные программы &kde; вроде &kontact;.</para
+></listitem>
+
+        <listitem
+><para
+>Наконец, есть набор программ (тоже разбитых на модули), разработка которых опирается на ресурсы &kde; (перевод, управление версиями, отслеживание ошибок и т. д.), но которые &kde; не выпускает в составе Plasma или набора приложений. Эти модули называются <quote
+>Extragear</quote
+>. </para
+></listitem>
+    </itemizedlist>
+</listitem>
+</orderedlist>
+</sect2>
+
+<sect2 id="selecting-modules">
+<title
+>Выбор собираемых модулей</title>
+
+<para
+>Какие модули собирать, определяет <link linkend="kdesrc-buildrc"
+>файл конфигурации</link
+>. После раздела <literal
+>global</literal
+> идёт список собираемых модулей, каждый — между строками module ... end module. Пример записи модуля — в <xref linkend="conf-module-example"/>.</para>
+
+<example id="conf-module-example">
+<title
+>Пример записи модуля в файле конфигурации</title>
+<programlisting
+>module <replaceable
+>kdesrc-build-git</replaceable>
+    # Здесь параметры модуля, например:
+    <link linkend="conf-repository"
+>repository</link
+> kde:kdesrc-build
+    <link linkend="conf-make-options"
+>make-options</link
+> -j4 # 4 компиляции одновременно
+end module
+</programlisting>
+</example>
+
+<note
+><para
+>На практике такая конструкция обычно не используется напрямую: большинство модулей задаётся через наборы модулей, как описано ниже.</para
+></note>
+
+<para
+>При использовании только записей <literal
+>module</literal
+> &kdesrc-build; собирает модули в указанном порядке и не пытается загружать никаких репозиториев, кроме явно указанных. </para>
+
+</sect2>
+
+<sect2 id="module-sets">
+<title
+>Наборы модулей</title>
+
+<para
+>Исходный код &kde; разбит на множество сравнительно небольших репозиториев Git. Чтобы упростить управление многочисленными репозиториями любой полезной установки на основе &kde;, &kdesrc-build; позволяет объединять модули в группу — <quote
+>набор модулей</quote
+>. </para>
+
+<sect3 id="module-set-concept">
+<title
+>Основы наборов модулей</title>
+
+<para
+>Набор модулей позволяет быстро описать много загружаемых и собираемых модулей Git, как если бы каждый был описан отдельно. Параметр <link linkend="conf-repository"
+>repository</link
+> обрабатывается особо и задаёт, откуда загружается каждый модуль, а все остальные параметры набора копируются в каждый созданный так модуль.</para>
+
+<example id="example-using-module-sets">
+<title
+>Использование наборов модулей</title>
+<programlisting
+>global
+    <option
+><link linkend="conf-git-repository-base"
+>git-repository-base</link
+></option
+> <replaceable
+>kde-git</replaceable
+> <replaceable
+>kde:</replaceable>
+end global
+
+module <replaceable
+>qt</replaceable>
+    # Параметры опущены для краткости
+end module
+
+module-set <replaceable
+>kde-support-libs</replaceable>
+    <option
+><link linkend="conf-repository"
+>repository</link
+></option
+> <replaceable
+>kde-git</replaceable>
+    <option
+><link linkend="conf-use-modules"
+>use-modules</link
+></option
+> <replaceable
+>automoc</replaceable
+> <replaceable
+>attica</replaceable
+> <replaceable
+>akonadi</replaceable>
+end module-set
+
+# Другие нужные модули...
+module <replaceable
+>kdesupport</replaceable>
+end module
+</programlisting>
+</example>
+
+<para
+>В <xref linkend="example-using-module-sets"/> показан небольшой набор модулей. Встретив его, &kdesrc-build; действует так, как если бы для каждого модуля из <option
+>use-modules</option
+> был описан отдельный модуль, <option
+>repository</option
+> которого равен <option
+>repository</option
+> набора, за которым сразу следует имя модуля.</para>
+
+<para
+>Кроме того, в наборе можно передать и другие параметры — они копируются в каждый созданный модуль. С помощью module-set можно быстро описать много модулей Git с одним базовым URL репозитория. Набору можно дать имя (как в примере), чтобы быстро ссылаться на всю группу модулей из командной строки.</para>
+
+</sect3>
+<sect3 id="module-sets-kde">
+<title
+>Особая поддержка наборов модулей KDE</title>
+
+<para
+>Описанная поддержка наборов относится к любым модулям на основе Git. Для репозиториев Git &kde; в &kdesrc-build; есть дополнительные возможности, упрощающие жизнь пользователям и разработчикам. Они включаются значением <literal
+>kde-projects</literal
+> параметра <option
+>repository</option
+> набора модулей. </para>
+
+<para
+>Обычно &kdesrc-build; собирает только модули из файла конфигурации в указанном порядке. Но с набором модулей <literal
+>kde-projects</literal
+> &kdesrc-build; умеет разрешать зависимости модулей &kde; и автоматически включать в сборку модули, указанные лишь косвенно.</para>
+
+<example id="example-using-kde-module-sets">
+<title
+>Использование наборов модулей kde-projects</title>
+<programlisting
+># Добавляет только модуль juk (репозиторий kde/kdemultimedia/juk)
+module-set <replaceable
+>juk-set</replaceable>
+    <option
+>repository</option
+> kde-projects
+    <option
+>use-modules</option
+> <replaceable
+>juk</replaceable>
+end module-set
+
+# Добавляет все модули из kde/multimedia/*, включая juk,
+# но без других зависимостей
+module-set <replaceable
+>multimedia-set</replaceable>
+    <option
+>repository</option
+> kde-projects
+    <option
+>use-modules</option
+> <replaceable
+>kde/multimedia</replaceable>
+end module-set
+
+# Добавляет все модули из kde/multimedia/* и все зависимости kde-projects
+# за пределами kde/kdemultimedia
+module-set <replaceable
+>multimedia-deps-set</replaceable>
+    <option
+>repository</option
+> kde-projects
+    <option
+>use-modules</option
+> <replaceable
+>kde/multimedia</replaceable>
+    <option
+>include-dependencies</option
+> <replaceable
+>true</replaceable>
+end module-set
+
+# Все модули из этих трёх наборов автоматически выстраиваются в порядке
+# зависимостей независимо от значения include-dependencies
+</programlisting>
+</example>
+
+<tip
+><para
+>Набор модулей <literal
+>kde-projects</literal
+> — основной способ описать собираемые модули.</para
+></tip>
+
+<para
+>Все наборы модулей используют параметры <link linkend="conf-repository"
+>repository</link
+> и <link linkend="conf-use-modules"
+>use-modules</link
+>. У наборов <link linkend="kde-projects-module-sets"
+><literal
+>kde-projects</literal
+></link
+> значение <option
+>repository</option
+> задано заранее, а другие типы наборов используют ещё и параметр <link linkend="conf-git-repository-base"
+>git-repository-base</link
+>. </para>
+</sect3>
+
+</sect2>
+
+<sect2 id="kde-projects-module-sets">
+<title
+>Официальная база данных модулей &kde;</title>
+
+<para
+>Репозитории Git &kde; позволяют объединять связанные модули Git в группы (например, kdegraphics). Сам Git этих групп не различает, но &kdesrc-build; понимает их благодаря <link linkend="module-sets"
+>наборам модулей</link
+> с параметром <option
+>repository</option
+>, равным <quote
+><literal
+>kde-projects</literal
+></quote
+>.</para>
+
+<para
+>&kdesrc-build; распознаёт, что репозиторий <literal
+>kde-projects</literal
+> требует особой обработки, и соответственно настраивает сборку. Среди прочего &kdesrc-build;:</para>
+
+<itemizedlist>
+
+<listitem
+><para
+>загружает свежую базу данных модулей из <ulink url="https://commits.kde.org/"
+>архива git &kde;</ulink
+>;</para
+></listitem>
+
+<listitem
+><para
+>ищет в этой базе модуль с именем из параметра <option
+>use-modules</option
+> набора;</para
+></listitem>
+
+<listitem
+><para
+>для каждого найденного модуля &kdesrc-build; ищет в базе нужный репозиторий с учётом действующего параметра <link linkend="conf-branch-group"
+>branch-group</link
+>. Если репозиторий существует и активен для этой группы ветвей, &kdesrc-build; автоматически использует его для загрузки или обновления исходного кода. </para
+></listitem>
+
+</itemizedlist>
+
+<note
+><para
+>В текущей базе у некоторых групп модулей есть не только набор модулей, но <emphasis
+>ещё и</emphasis
+> собственный репозиторий &git;. В таких случаях &kdesrc-build; сейчас предпочитает репозиторий &git; группы, а не репозитории дочерних модулей. </para
+></note>
+
+<para
+>Следующий пример показывает, как с помощью базы модулей &kde; установить мультимедийную библиотеку Phonon.</para>
+
+<informalexample>
+<programlisting
+>module-set <replaceable
+>media-support</replaceable>
+    # Для использования базы модулей значение должно быть kde-projects.
+    <option
+><link linkend="conf-repository"
+>repository</link
+></option
+> <literal
+>kde-projects</literal>
+
+    # Какие модули искать в базе данных.
+    <option
+><link linkend="conf-use-modules"
+>use-modules</link
+></option
+> <replaceable
+>phonon/phonon</replaceable
+> <replaceable
+>phonon-gstreamer</replaceable
+> <replaceable
+>phonon-vlc</replaceable>
+end module-set
+</programlisting>
+</informalexample>
+
+<tip
+><para
+><literal
+>phonon/phonon</literal
+> используется потому, что иначе (при текущей базе проектов) &kdesrc-build; пришлось бы выбирать между группой проектов <quote
+>phonon</quote
+> и отдельным проектом <quote
+>phonon</quote
+>. Сейчас &kdesrc-build; выбрал бы первое и собрал бы намного больше модулей поддержки, чем нужно.</para
+></tip>
+
+<para
+>Следующий пример, пожалуй, жизненнее и показывает возможность, доступную только с базой модулей &kde;: сборку всех графических приложений &kde; одним описанием.</para>
+
+<informalexample>
+<programlisting
+>module-set <replaceable
+>kdegraphics</replaceable>
+    # Для использования базы модулей значение должно быть kde-projects.
+    <option
+><link linkend="conf-repository"
+>repository</link
+></option
+> <literal
+>kde-projects</literal>
+
+    # Какие модули искать в базе данных.
+    <option
+><link linkend="conf-use-modules"
+>use-modules</link
+></option
+> <literal
+>kdegraphics/libs</literal
+> <literal
+>kdegraphics/*</literal>
+end module-set
+</programlisting>
+</informalexample>
+
+<para
+>Здесь показаны две важные возможности:</para>
+
+<orderedlist>
+
+<listitem
+><para
+>&kdesrc-build; позволяет указать потомков модуля, не собирая родительский модуль, с помощью записи <userinput
+><replaceable
+>имя-модуля</replaceable
+>/*</userinput
+>. Здесь это даже необходимо: базовый модуль kdegraphics помечен как неактивный, чтобы случайно не собирать его вместе с дочерними. Указание потомков позволяет &kdesrc-build; обойти отключённый модуль. </para
+></listitem>
+
+<listitem
+><para
+>Кроме того, &kdesrc-build; не добавляет модуль в список сборки больше одного раза. Поэтому можно вручную поставить <literal
+>kdegraphics/libs</literal
+> первым, перед остальным <literal
+>kdegraphics</literal
+>, не собирая <literal
+>kdegraphics/libs</literal
+> дважды. Раньше это требовалось для правильной обработки зависимостей, а сейчас остаётся запасным вариантом на случай, если в базе проектов &kde; нет метаданных о зависимостях. </para
+></listitem>
+</orderedlist>
+</sect2>
+
+<sect2 id="ignoring-project-modules">
+<title
+>Исключение модулей проектов &kde;</title>
+
+<para
+>Может понадобиться собрать все программы группы модулей &kde; <emphasis
+>кроме</emphasis
+> какой-то одной.</para>
+
+<para
+>Например, в группу <literal
+>kdeutils</literal
+> входит программа <application
+>kremotecontrol</application
+>. Если у компьютера нет оборудования для приёма сигналов пультов дистанционного управления, загружать, собирать и устанавливать <application
+>kremotecontrol</application
+> при каждом обновлении <literal
+>kdeutils</literal
+> ни к чему.</para>
+
+<para
+>Для этого служит параметр конфигурации <link linkend="conf-ignore-modules"
+>ignore-modules</link
+>. В командной строке то же делает <link linkend="ignoring-modules"
+>параметр &cmd-ignore-modules;</link
+>, удобный для однократного исключения модуля. </para>
+
+<example id="example-ignoring-a-module">
+<title
+>Пример пропуска модуля kde-project в группе</title>
+<programlisting
+>module-set <replaceable
+>utils</replaceable>
+    <option
+><link linkend="conf-repository"
+>repository</link
+></option
+> <literal
+>kde-projects</literal>
+
+    # Какие модули искать в базе данных.
+    <option
+><link linkend="conf-use-modules"
+>use-modules</link
+></option
+> <replaceable
+>kdeutils</replaceable>
+
+    # «Вычитает» модули из выбранных выше через use-modules.
+    <option
+><link linkend="conf-ignore-modules"
+>ignore-modules</link
+></option
+> <replaceable
+>kremotecontrol</replaceable>
+end module-set
+
+module-set <replaceable
+>graphics</replaceable>
+    <option
+><link linkend="conf-repository"
+>repository</link
+></option
+> <literal
+>kde-projects</literal>
+
+    # Какие модули искать в базе данных.
+    <option
+><link linkend="conf-use-modules"
+>use-modules</link
+></option
+> <replaceable
+>extragear/graphics</replaceable>
+
+    # «Вычитает» модули из выбранных выше через use-modules.
+    # Здесь пропускаются *оба* модуля: extragear/graphics/kipi-plugins и
+    # extragear/graphics/kipi-plugins/kipi-plugins-docs
+    <option
+><link linkend="conf-ignore-modules"
+>ignore-modules</link
+></option
+> <replaceable
+>extragear/graphics/kipi-plugins</replaceable>
+end module-set
+</programlisting>
+</example>
+
+</sect2>
+
+</sect1>

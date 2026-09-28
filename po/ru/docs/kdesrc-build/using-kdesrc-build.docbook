@@ -1,0 +1,36 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<chapter id="using-kdesrc-build">
+<title
+>Использование &kdesrc-build;</title>
+
+<sect1 id="using-kdesrc-build-preface">
+<title
+>Предисловие</title>
+
+<para
+>Обычно, выполнив описанное в <xref linkend="getting-started"/>, пользоваться &kdesrc-build; просто — достаточно ввести в терминале:</para>
+
+<screen
+><prompt
+>&percnt;</prompt
+> <command
+><userinput
+>kdesrc-build</userinput
+></command
+>
+</screen>
+
+<para
+>&kdesrc-build; загрузит исходный код &kde;, попытается настроить и собрать его, а затем установит.</para>
+
+<para
+>Читайте дальше, чтобы узнать, как &kdesrc-build; это делает и что ещё умеет.</para>
+
+</sect1
+>&basic-features; &advanced-features; &developer-features; &other-features; </chapter>

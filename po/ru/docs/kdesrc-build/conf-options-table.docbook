@@ -1,0 +1,2542 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<sect1 id="conf-options-table">
+<title
+>Таблица параметров конфигурации</title>
+
+<para
+>Ниже приведены таблицы параметров со следующими сведениями:</para>
+
+<itemizedlist>
+
+<listitem
+><para
+>Имя параметра</para
+></listitem>
+
+<listitem
+><para
+>Область действия параметра: <emphasis
+>global</emphasis
+>, <emphasis
+>module</emphasis
+> или <emphasis
+>module-set</emphasis
+>. Параметры с областью действия <emphasis
+>module</emphasis
+> и/или <emphasis
+>module-set</emphasis
+> можно задавать и в разделах <emphasis
+>options</emphasis
+>. </para
+></listitem>
+
+<listitem
+><para
+>Особые замечания о назначении и использовании параметра.</para
+></listitem>
+
+</itemizedlist>
+
+<table id="options-global-table">
+<title
+>Параметры только глобальной области действия</title>
+<tgroup cols="2">
+
+<thead>
+<row>
+<entry
+>Имя параметра</entry>
+<entry
+>Описание</entry>
+</row>
+</thead>
+<tbody>
+
+<row id="conf-async">
+<entry
+><link linkend="conf-async"
+>async</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>True</member>
+<member
+>Доступен с версии</member
+><member
+>1.6</member>
+</simplelist>
+<para
+>Этот параметр включает асинхронный режим работы, в котором обновление исходного кода и сборка выполняются параллельно, а не так, что сборка начинается лишь после обновления всего кода.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-async"/></para>
+</entry>
+</row>
+
+<row id="conf-colorful-output">
+<entry
+><link linkend="conf-colorful-output"
+>colorful-output</link
+></entry>
+<entry
+><simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>True</member>
+</simplelist
+><para
+>Значение <userinput
+>false</userinput
+> отключает цветной вывод &kdesrc-build;. &kdesrc-build; выводит цветовые коды только в терминал (xterm, &konsole; или обычную консоль &Linux;).</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-color"/></para>
+</entry>
+</row>
+
+<row id="conf-disable-agent-check">
+<entry
+><link linkend="conf-disable-agent-check"
+>disable-agent-check</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>False</member>
+</simplelist>
+<para
+>Если исходный код &git; загружается через &ssh; (например, по протоколу git+ssh), этот параметр определяет, будет ли &kdesrc-build; проверять, что при использовании ssh-agent тот действительно управляет какими-то ключами &ssh;. Это нужно, чтобы &ssh; не спрашивал парольную фразу для каждого модуля.</para>
+<para
+>Связанный параметр командной строки: --disable-agent-check, --no-disable-agent-check</para>
+</entry>
+</row>
+
+<row id="conf-git-desired-protocol">
+<entry
+><link linkend="conf-git-desired-protocol"
+>git-desired-protocol</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Значение по умолчанию</member
+><member
+>git</member>
+<member
+>История</member
+><member
+>Параметр добавлен в &kdesrc-build; 1.16. До версии 20.06 он задавал URL загрузки, а не URL отправки изменений. Начиная с 20.06 при обновлении проектов KDE всегда используется <literal
+>https</literal
+>.</member>
+</simplelist>
+<para
+>Параметр относится только к модулям из репозитория <link linkend="kde-projects-module-sets"
+>проекта &kde;</link
+>.</para>
+
+<para
+>Фактически этот параметр задаёт, какой сетевой протокол предпочитать при отправке исходного кода этих модулей. Обычно используется очень эффективный протокол <literal
+>git</literal
+>, но в некоторых сетях (например, корпоративных или общедоступных Wi-Fi) он может быть заблокирован. Альтернатива, поддерживаемая гораздо шире, — протокол <literal
+>https</literal
+>, используемый веб-сайтами.</para>
+
+<para
+>В такой ограниченной сети задайте этому параметру значение <userinput
+>http</userinput
+>, чтобы предпочитать <literal
+>https</literal
+>.</para>
+
+<tip
+><para
+>Если для сетевого трафика нужен и HTTP-прокси, может понадобиться также параметр <link linkend="conf-http-proxy"
+>http-proxy</link
+>.</para
+></tip>
+
+<para
+>В остальных случаях этот параметр задавать не следует: протокол по умолчанию наиболее эффективен.</para>
+
+</entry>
+</row>
+
+<row id="conf-git-repository-base">
+<entry
+><link linkend="conf-git-repository-base"
+>git-repository-base</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.12.1</member>
+</simplelist>
+<para
+>Этот параметр создаёт короткое имя для базового URL репозитория Git, на которое затем можно ссылаться в описаниях <link linkend="module-sets"
+>наборов модулей</link
+>. Это удобно, чтобы быстро описать много собираемых модулей Git.</para>
+
+<para
+>Нужно указать через пробел две вещи: имя для базового URL и сам базовый URL. Например:</para>
+
+<para>
+<programlisting
+>global
+    # прочие параметры
+    # Общий путь ко всем модулям анонимного сервера Git.
+    git-repository-base <replaceable
+>kde-git</replaceable
+> <replaceable
+>kde:</replaceable>
+end global
+
+# Описания модулей
+
+module-set
+    # Теперь можно использовать заданный выше псевдоним, но <emphasis
+>только</emphasis
+> в module-set.
+    repository <replaceable
+>kde-git</replaceable>
+    <link linkend="conf-use-modules"
+>use-modules</link
+> <replaceable
+>module1.git</replaceable
+> <replaceable
+>module2.git</replaceable>
+end module-set
+</programlisting>
+</para>
+
+<para
+>Параметр <literal
+>use-modules</literal
+> набора модулей создал внутри два модуля, и &kdesrc-build; ведёт себя так, как если бы прочитал:</para>
+
+<programlisting
+>module module1
+    repository kde:<replaceable
+>module1.git</replaceable>
+end module
+
+module module2
+    repository kde:<replaceable
+>module2.git</replaceable>
+end module
+</programlisting>
+
+<para
+>Использованный выше префикс репозитория &git; <literal
+>kde:</literal
+> — сокращение, которое &kdesrc-build; настраивает автоматически. Подробнее — в статье TechBase <ulink url="https://techbase.kde.org/Development/Git/Configuration#URL_Renaming"
+>URL Renaming</ulink
+>. В отличие от большинства параметров, этот можно указывать многократно, создавая сколько угодно псевдонимов.</para>
+
+<tip
+><para
+>Для использования module-set этот параметр не обязателен; он лишь упрощает использование одного репозитория во многих наборах модулей.</para
+></tip>
+</entry>
+</row>
+
+<row id="conf-install-environment-driver">
+<entry
+><link linkend="conf-install-environment-driver"
+>install-environment-driver</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>True</member>
+<member
+>Доступен с версии</member
+><member
+>17.08</member>
+</simplelist>
+<para
+>Устанавливать сценарий оболочки, который можно подключить в сценариях профиля пользователя, чтобы легко задать переменные окружения, нужные для запуска рабочего стола Plasma, собранного &kdesrc-build;.</para>
+
+<para
+>Этот драйвер изменяет следующие файлы:</para>
+
+<itemizedlist>
+<listitem
+><para
+><filename
+>$XDG_CONFIG_HOME/kde-env-master.sh</filename
+> (обычно <filename
+>~/.config/kde-env-master.sh</filename
+>).</para
+></listitem>
+<listitem
+><para
+><filename
+>$XDG_CONFIG_HOME/kde-env-user.sh</filename
+> (обычно <filename
+>~/.config/kde-env-user.sh</filename
+>).</para
+></listitem>
+</itemizedlist>
+
+<para
+>Файл <filename
+>kde-env-user.sh</filename
+> необязателен. Он предназначен для пользовательских параметров (примеры — в разделе <ulink url="https://userbase.kde.org/KDE_System_Administration/Environment_Variables#Troubleshooting_and_Debugging"
+>Troubleshooting and Debugging</ulink
+> на &kde; UserBase), но их можно задать и в других местах — в имеющихся сценариях профиля пользователя.</para>
+
+<para
+>Отключить эту возможность можно, задав параметру значение <replaceable
+>false</replaceable
+> и убедившись, что параметр <link linkend="conf-install-session-driver"
+>install-session-driver</link
+> тоже отключён.</para>
+
+<tip
+><para
+>&kdesrc-build; не перезапишет существующие файлы, если не передан также параметр командной строки <option
+><link linkend="cmdline-delete-my-settings"
+>--delete-my-settings</link
+></option
+>.</para
+></tip>
+<para
+>Связанный параметр командной строки: --install-environment-driver, --no-install-environment-driver</para>
+</entry>
+</row>
+
+<row id="conf-install-session-driver">
+<entry
+><link linkend="conf-install-session-driver"
+>install-session-driver</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>True</member>
+<member
+>Доступен с версии</member
+><member
+>1.16</member>
+</simplelist>
+<para
+>Если параметр включён, &kdesrc-build; попытается установить для графического диспетчера входа драйвер, позволяющий входить в рабочий стол &kde;, собранный &kdesrc-build;.</para>
+
+<para
+>Этот драйвер изменяет следующие файлы:</para>
+
+<itemizedlist>
+<listitem
+><para
+><filename
+>~/.xsession</filename
+></para
+></listitem>
+<listitem
+><para
+><filename
+>$XDG_CONFIG_HOME/kde-env-master.sh</filename
+> (обычно <filename
+>~/.config/kde-env-master.sh</filename
+>).</para
+></listitem>
+<listitem
+><para
+><filename
+>$XDG_CONFIG_HOME/kde-env-user.sh</filename
+> (обычно <filename
+>~/.config/kde-env-user.sh</filename
+>).</para
+></listitem>
+</itemizedlist>
+
+<para
+>Если у вас свой драйвер входа, отключите эту возможность значением <replaceable
+>false</replaceable
+>. Включение этой возможности включает и <link linkend="conf-install-environment-driver"
+>install-environment-driver</link
+>.</para>
+
+<tip
+><para
+>&kdesrc-build; не перезапишет существующие файлы, если не передан также параметр командной строки <option
+><link linkend="cmdline-delete-my-settings"
+>--delete-my-settings</link
+></option
+>.</para
+></tip>
+<para
+>Связанный параметр командной строки: --install-session-driver, --no-install-session-driver</para>
+</entry>
+</row>
+
+<row id="conf-niceness">
+<entry
+><link linkend="conf-niceness"
+>niceness</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Целое</member>
+<member
+>Значение по умолчанию</member
+><member
+>10</member>
+</simplelist>
+<para
+>Задайте число от 20 до 0. Чем оно больше, тем ниже приоритет, который &kdesrc-build; назначит себе, то есть тем «уступчивее» программа.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-nice"/></para>
+</entry>
+</row>
+
+<row id="conf-num-cores">
+<entry
+><link linkend="conf-num-cores"
+>num-cores</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Целое</member>
+<member
+>Значение по умолчанию</member
+><member
+>Зависит от системы</member>
+<member
+>Доступен с версии</member
+><member
+>20.07</member>
+</simplelist>
+<para
+>Этот параметр задаёт &kdesrc-build; (при вызове <command
+>kdesrc-build --generate-config</command
+>), равным числу доступных процессоров (по данным внешней программы <application
+>nproc</application
+>). Если &kdesrc-build; не может определить число процессоров, задаётся значение 4.</para>
+
+<para
+>Пример использования параметра — в разделе <xref linkend="make-options-example"/>.</para>
+<para
+>Связанный параметр командной строки: --num-cores <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-num-cores-low-mem">
+<entry
+><link linkend="conf-num-cores-low-mem"
+>num-cores-low-mem</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Целое</member>
+<member
+>Значение по умолчанию</member
+><member
+>Зависит от системы</member>
+<member
+>Доступен с версии</member
+><member
+>20.07</member>
+</simplelist>
+<para
+>Этот параметр задаёт &kdesrc-build; (при вызове <command
+>kdesrc-build --generate-config</command
+>), равным числу процессоров, безопасному для тяжёлых и особо ресурсоёмких модулей вроде <literal
+>qtwebengine</literal
+>, чтобы при сборке не кончилась память.</para>
+
+<para
+>Обычно берётся одно процессорное ядро на каждые 2 гигабайта (ГиБ) общей памяти — не меньше 1 ядра и не больше <option
+><link linkend="conf-num-cores"
+>num-cores</link
+></option
+>.</para>
+
+<para
+>Хотя параметр предназначен для модулей &Qt;, его можно использовать для любого модуля так же, как <option
+>num-cores</option
+>.</para>
+
+<para
+>Если &kdesrc-build; не может определить объём доступной памяти, задаётся значение 2.</para>
+
+<para
+>Связанный параметр командной строки: --num-cores-low-mem <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-persistent-data-file">
+<entry
+><link linkend="conf-persistent-data-file"
+>persistent-data-file</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.15</member>
+</simplelist>
+<para
+>Этот параметр задаёт, где &kdesrc-build; хранит постоянные данные. По умолчанию — в файле <filename
+>.kdesrc-build-data</filename
+> в том же каталоге, что и используемый файл конфигурации. При использовании глобального файла конфигурации данные сохраняются в <filename
+>~/.local/state/kdesrc-build-data</filename
+> (или в <filename
+>$XDG_STATE_HOME/kdesrc-build-data</filename
+>, если задана <envar
+>$XDG_STATE_HOME</envar
+>). Если в одном каталоге лежит несколько конфигураций, задайте этот параметр вручную, чтобы их постоянные данные не конфликтовали. </para>
+<para
+>Связанный параметр командной строки: --persistent-data-file <replaceable
+>файл</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-ssh-identity-file">
+<entry
+><link linkend="conf-ssh-identity-file"
+>ssh-identity-file</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.14.2</member>
+</simplelist>
+<para
+>Задаёт, какой файл закрытого ключа SSH передаётся команде <command
+>ssh-add</command
+>, когда &kdesrc-build; загружает исходный код из репозиториев, требующих аутентификации. Смотрите также <xref linkend="ssh-agent-reminder"/>.</para>
+</entry>
+</row>
+
+<row id="conf-use-idle-io-priority">
+<entry
+><link linkend="conf-use-idle-io-priority"
+>use-idle-io-priority</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>False</member>
+<member
+>Доступен с версии</member
+><member
+>1.12</member>
+</simplelist>
+<para
+>Использовать пониженный приоритет для дискового и прочего ввода-вывода. Это может заметно улучшить отзывчивость остальной системы ценой немного более долгой работы &kdesrc-build;.</para>
+<para
+>Связанный параметр командной строки: --use-idle-io-priority, --no-use-idle-io-priority</para>
+</entry>
+</row>
+
+<row id="conf-use-inactive-modules">
+<entry
+><link linkend="conf-use-inactive-modules"
+>use-inactive-modules</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>False</member>
+</simplelist>
+<para
+>Разрешить kdesrc-build клонировать и обновлять также репозитории, помеченные как неактивные.</para>
+<para
+>Связанный параметр командной строки: --use-inactive-modules, --no-use-inactive-modules</para>
+</entry>
+</row>
+
+</tbody>
+</tgroup>
+</table>
+
+<!-- Between tables -->
+
+<table id="option-table">
+<title
+>Параметры всех областей действия (module, module-set и global)</title>
+<tgroup cols="2">
+
+<thead>
+<row>
+<entry
+>Имя параметра</entry>
+<entry
+>Описание</entry>
+</row>
+</thead>
+
+<tbody>
+
+<row id="conf-binpath">
+<entry
+><link linkend="conf-binpath"
+>binpath</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Задаёт переменную окружения PATH при сборке. Перекрыть это значение в параметрах модуля нельзя. По умолчанию используется $<envar
+>PATH</envar
+>, заданная при запуске сценария. Переменная должна содержать разделённые двоеточиями пути к средствам разработки. Пути <filename class="directory"
+>${install-dir}/bin</filename
+> и <filename class="directory"
+>${qt-install-dir}/bin</filename
+> добавляются автоматически. В добавляемых путях можно использовать тильду (~).</para>
+<para
+>Связанный параметр командной строки: --binpath <replaceable
+>путь</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-branch">
+<entry
+><link linkend="conf-branch"
+>branch</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Значение по умолчанию</member
+><member
+>master</member>
+</simplelist>
+<para
+>Получить указанную ветвь вместо ветви по умолчанию.</para>
+<note
+><para
+>Для большинства модулей &kde; лучше использовать параметр <link linkend="conf-branch-group"
+>branch-group</link
+>, а этот — для отдельных исключений.</para
+></note>
+<para
+>Связанный параметр командной строки: --branch <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-branch-group">
+<entry
+><link linkend="conf-branch-group"
+>branch-group</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.16-pre2</member>
+</simplelist>
+<para
+>Задаёт общую группу, из которой выбираются модули.</para>
+
+<para
+>Для поддерживаемых типов модулей &git; &kdesrc-build; автоматически определяет нужную ветвь по правилам, заданным разработчиками &kde; (их можно посмотреть в репозитории <literal
+>kde-build-metadata</literal
+> в каталоге исходного кода). Определённая ветвь используется так, как если бы вы указали её сами параметром <link linkend="conf-branch"
+>branch</link
+>. </para>
+
+<para
+>Это удобно, если нужно просто следовать обычной линии разработки, не отслеживая все изменения имён ветвей.</para>
+
+<para
+>Если вы <emphasis
+>всё же</emphasis
+> сами задаёте <literal
+>branch</literal
+>, он перекрывает этот параметр. То же относится и к другим параметрам выбора ветви, например <link linkend="conf-tag"
+>tag</link
+>.</para>
+
+<note
+><para
+>Параметр относится только к модулям &git; из <literal
+>kde-projects</literal
+> (обычный случай). Смотрите также <xref linkend="kde-projects-module-sets"/>. </para
+></note>
+
+<para
+>Связанный параметр командной строки: --branch-group <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-build-dir">
+<entry
+><link linkend="conf-build-dir"
+>build-dir</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Значение по умолчанию</member
+><member
+><filename class="directory"
+>~/kde/build</filename
+></member>
+</simplelist>
+<para
+>Задаёт каталог для собранного кода. Есть три способа его указать:</para>
+
+<orderedlist>
+
+<listitem
+><para
+>Относительно каталога исходного кода &kde; из &git; (смотрите <link linkend="conf-source-dir"
+>параметр source-dir</link
+>). Этот способ используется по умолчанию, если имя каталога не начинается с тильды (~) или косой черты (/).</para
+></listitem>
+
+<listitem
+><para
+>Абсолютный путь. Путь, начинающийся с /, используется как есть. Например, <filename class="directory"
+>/tmp/kde-obj-dir/</filename
+>.</para
+></listitem>
+
+<listitem
+><para
+>Относительно домашнего каталога. Путь, начинающийся с ~, отсчитывается от домашнего каталога — так же, как тильда раскрывается в оболочке. Например, <filename class="directory"
+>~/builddir</filename
+> задаёт каталог сборки <filename class="directory"
+>/home/user-name/builddir</filename
+>.</para
+></listitem>
+
+</orderedlist>
+
+<para
+>Как ни странно, этот параметр можно менять для каждого модуля отдельно.</para>
+<para
+>Связанный параметр командной строки: --build-dir <replaceable
+>путь</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-build-when-unchanged">
+<entry
+><link linkend="conf-build-when-unchanged"
+>build-when-unchanged</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>True</member>
+</simplelist>
+<para
+>Определяет, пытается ли &kdesrc-build; всегда собирать модуль, исходный код которого не обновлялся.</para>
+
+<para
+>При значении <userinput
+>true</userinput
+> &kdesrc-build; всегда выполняет этап сборки модуля, даже если его исходный код не обновлялся. Так вероятнее получить правильную сборку.</para>
+
+<para
+>При значении <userinput
+>false</userinput
+> &kdesrc-build; выполняет этап сборки модуля, только если его исходный код обновился или есть другие признаки того, что пересборка действительно нужна. Это экономит время, особенно если запускать &kdesrc-build; ежедневно или чаще.</para>
+
+<important
+><para
+>Эта возможность — лишь оптимизация и, как многие оптимизации, может пойти в ущерб корректности установки. Например, изменения в модулях qt или kdelibs могут потребовать пересборки других модулей, даже если их исходный код вообще не менялся.</para
+></important>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-build-when-unchanged"/></para>
+</entry>
+</row>
+
+<row id="conf-cmake-generator">
+<entry
+><link linkend="conf-cmake-generator"
+>cmake-generator</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Значение по умолчанию</member
+><member
+>Unix Makefiles</member>
+</simplelist>
+<para
+>Задаёт генератор для &cmake;. Сейчас поддерживаются <literal
+>Ninja</literal
+> и <literal
+>Unix Makefiles</literal
+>, а также основанные на них дополнительные генераторы вроде <literal
+>Eclipse CDT4 - Ninja </literal
+>. Недопустимые (неподдерживаемые) значения пропускаются, как если бы параметр не был задан. </para>
+
+<para
+>Если допустимый генератор задан также через <link linkend="conf-cmake-options"
+>cmake-options</link
+>, он перекрывает значение <literal
+>cmake-generator</literal
+>.</para>
+<para
+>Связанный параметр командной строки: --cmake-generator <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-cmake-toolchain">
+<entry
+><link linkend="conf-cmake-toolchain"
+>cmake-toolchain</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Задаёт файл набора средств сборки (toolchain) для &cmake;. </para>
+<para
+>Если задан допустимый файл набора средств сборки, &kdesrc-build; <emphasis
+>больше не задаёт переменные окружения автоматически</emphasis
+>. Если этот файл не работает с &kdesrc-build; сразу, окружение можно поправить вручную параметрами &set-env;, &binpath; и &libpath;. Подробнее — в <link linkend="kdesrc-build-std-flags"
+>обзоре стандартных флагов, добавляемых &kdesrc-build;</link
+>. </para>
+<para
+>Если допустимый набор средств сборки задан также через <link linkend="conf-cmake-options"
+>cmake-options</link
+>, он перекрывает значение <literal
+>cmake-toolchain</literal
+>.</para>
+<para
+>Связанный параметр командной строки: --cmake-toolchain <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-cmake-options">
+<entry
+><link linkend="conf-cmake-options"
+>cmake-options</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Для системы сборки по умолчанию дополняет глобальные параметры, для других систем сборки — перекрывает их.</para>
+<para
+>Задаёт флаги, передаваемые &cmake; при создании системы сборки модуля. Заданный глобально, параметр применяется ко всем модулям, которые собирает сценарий; заданный для модуля, добавляется в конец глобальных параметров. Так общие параметры &cmake; можно указать в глобальном разделе.</para>
+
+<para
+>Параметр не относится к qt (он не использует &cmake;). Для него используйте <link linkend="conf-configure-flags"
+>configure-flags</link
+>.</para>
+
+<para
+>Допустимый генератор, указанный среди перечисленных параметров, перекрывает значение <link linkend="conf-cmake-generator"
+>cmake-generator</link
+>. Недопустимые (неподдерживаемые) генераторы пропускаются и не передаются &cmake;. </para>
+
+<para
+>Допустимый файл набора средств сборки, указанный среди перечисленных параметров, перекрывает значение <link linkend="conf-cmake-toolchain"
+>cmake-toolchain</link
+>. Недопустимые наборы пропускаются и не передаются &cmake;. </para>
+
+<para
+>Эти параметры передаются прямо в командную строку &cmake;, поэтому записываются так же, как для &cmake;. Например:</para>
+
+<programlisting
+>cmake-options -DCMAKE_BUILD_TYPE=RelWithDebInfo
+</programlisting>
+
+<para
+>Поскольку это хлопотно, &kdesrc-build; старается сделать так, чтобы при правильно заданных остальных параметрах этот можно было оставить пустым. (Иначе говоря, <emphasis
+>обязательные</emphasis
+> параметры &cmake; задаются автоматически.)</para>
+<para
+>Связанный параметр командной строки: --cmake-options <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-compile-commands-export">
+<entry
+><link linkend="conf-compile-commands-export"
+>compile-commands-export</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>True</member>
+</simplelist>
+<para
+>Включает создание файла <literal
+>compile_commands.json</literal
+> средствами CMake в каталоге сборки. </para>
+<para
+>Связанный параметр командной строки: --compile-commands-export, --no-compile-commands-export</para>
+</entry>
+</row>
+
+<row id="conf-compile-commands-linking">
+<entry
+><link linkend="conf-compile-commands-linking"
+>compile-commands-linking</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>False</member>
+</simplelist>
+<para
+>Включает создание символических ссылок на созданный CMake в каталоге сборки файл <literal
+>compile_commands.json</literal
+> в соответствующем каталоге исходного кода. </para>
+<para
+>Связанный параметр командной строки: --compile-commands-linking, --no-compile-commands-linking</para>
+</entry>
+</row>
+
+<row id="conf-configure-flags">
+<entry
+><link linkend="conf-configure-flags"
+>configure-flags</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Для системы сборки по умолчанию дополняет глобальные параметры, для других систем сборки — перекрывает их.</para>
+<para
+>Задаёт флаги, передаваемые ./configure при создании системы сборки модуля. Заданный глобально, параметр применяется ко всем модулям, которые собирает сценарий. <emphasis
+>Параметр работает только для qt.</emphasis
+></para>
+
+<para
+>Параметры конфигурации модулей KDE задаются через <link linkend="conf-cmake-options"
+>cmake-options</link
+>. </para>
+<para
+>Связанный параметр командной строки: --configure-flags <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-custom-build-command">
+<entry
+><link linkend="conf-custom-build-command"
+>custom-build-command</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+    <para
+>Позволяет выполнять сборку другой командой (например, не <command
+>make</command
+>). Как правило, &kdesrc-build; сам поступает правильно, так что этот параметр не нужен, но он может пригодиться для других систем сборки. </para>
+
+    <para
+>Значение параметра используется как запускаемая командная строка, к которой, как обычно, добавляется <link linkend="conf-make-options"
+>make-options</link
+>. </para>
+<para
+>Связанный параметр командной строки: --custom-build-command <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-cxxflags">
+<entry
+><link linkend="conf-cxxflags"
+>cxxflags</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Для системы сборки по умолчанию дополняет глобальные параметры, для других систем сборки — перекрывает их.</para>
+<para
+>Задаёт флаги сборки модуля. Он задаётся отдельно от <link linkend="conf-configure-flags"
+>configure-flags</link
+> и <link linkend="conf-cmake-options"
+>cmake-options</link
+>, потому что при сборке он также задаёт переменную окружения <envar
+>CXXFLAGS</envar
+>.</para>
+
+<para
+>Для &kde; 4 и любых других модулей, использующих &cmake;, при настройке модуля нужно задать параметру CMAKE_BUILD_TYPE значение <userinput
+>none</userinput
+>. Это делается через параметр <link linkend="conf-cmake-options"
+>cmake-options</link
+>. </para>
+<para
+>Связанный параметр командной строки: --cxxflags <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-dest-dir">
+<entry
+><link linkend="conf-dest-dir"
+>dest-dir</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Задаёт имя модуля на диске. Например, модуль extragear/network можно переименовать в extragear-network. Хотя это меняет имя модуля на диске, включать в имя каталоги или разделители каталогов не стоит: это помешает параметрам <link linkend="conf-build-dir"
+>build-dir</link
+> и <link linkend="conf-source-dir"
+>source-dir</link
+>.</para>
+<para
+>Связанный параметр командной строки: --dest-dir <replaceable
+>путь</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-do-not-compile">
+<entry
+><link linkend="conf-do-not-compile"
+>do-not-compile</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Задаёт набор каталогов модуля, которые не нужно собирать (вместо сборки всех). Каталоги перечисляются через пробел.</para>
+
+<para
+>Исходный код этих программ всё равно загружается.</para>
+
+<para
+>Например, чтобы не собирать каталоги <literal
+>codeeditor</literal
+> и <literal
+>minimaltest</literal
+> библиотеки <literal
+>syntaxhighlighting</literal
+>, добавьте в параметры syntaxhighlighting строку <userinput
+>do-not-compile codeeditor minimaltest</userinput
+>.</para>
+
+<para
+>Пример — в разделе <xref linkend="not-compiling"/>.</para>
+<para
+>Связанный параметр командной строки: --do-not-compile <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-git-user">
+<entry
+><link linkend="conf-git-user"
+>git-user</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>15.09</member>
+</simplelist>
+<para
+>Параметр предназначен для разработчиков &kde;. Если он задан, для <emphasis
+>вновь загруженных</emphasis
+> модулей &git; (а это подавляющее большинство модулей &kde;) автоматически настраиваются сведения о пользователе системы управления версиями &git;.</para>
+
+<para
+>В частности, для каждого нового репозитория &git; поля имени и адреса электронной почты пользователя заполняются значениями из этого параметра.</para>
+
+<para
+>Значение задаётся в виде <option
+><replaceable
+>Имя Пользователя</replaceable
+> &lt;<replaceable
+>email@example.com</replaceable
+>&gt;</option
+>.</para>
+
+<para
+>Например, разработчик <quote
+>Foo Barbaz</quote
+> с адресом <quote
+>foo@abc.xyz</quote
+> укажет:</para>
+<para>
+<programlisting
+><symbol
+>git-user</symbol
+> <replaceable
+>Foo Barbaz</replaceable
+> &lt;<replaceable
+>foo@abc.xyz</replaceable
+>&gt;
+</programlisting>
+</para>
+
+</entry>
+</row>
+
+<row id="conf-http-proxy">
+<entry
+><link linkend="conf-http-proxy"
+>http-proxy</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.16</member>
+</simplelist>
+<para
+>Если параметр задан, указанный URL используется как прокси-сервер для любого сетевого обмена по HTTP (например, при загрузке <link linkend="kde-projects-module-sets"
+>базы данных проектов KDE</link
+>).</para>
+
+<para
+>Кроме того, &kdesrc-build; по возможности постарается, чтобы и используемые им программы работали через этот прокси-сервер, задав переменную окружения <envar
+>http_proxy</envar
+>, <emphasis
+>если она ещё не задана</emphasis
+>.</para>
+<para
+>Связанный параметр командной строки: --http-proxy <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-directory-layout">
+<entry
+><link linkend="conf-directory-layout"
+>directory-layout</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Допустимые значения</member
+><member
+><userinput
+>flat</userinput
+>, <userinput
+>invent</userinput
+>, <userinput
+>metadata</userinput
+></member>
+<member
+>Значение по умолчанию</member
+><member
+>flat</member>
+</simplelist>
+<para
+>Задаёт структуру, которую &kdesrc-build; использует при создании каталогов исходного кода и сборки.</para>
+<para
+>Структура <userinput
+>flat</userinput
+> размещает все модули прямо в каталогах исходного кода и сборки верхнего уровня. Например, <literal
+>source/extragear/network/telepathy/ktp-text-ui</literal
+> в структуре <userinput
+>metadata</userinput
+> в структуре <userinput
+>flat</userinput
+> будет <literal
+>source/ktp-text-ui</literal
+>. </para>
+<para
+>Структура <userinput
+>invent</userinput
+> создаёт иерархию каталогов, повторяющую относительные пути репозиториев на <ulink url="https://invent.kde.org/"
+>invent.kde.org</ulink
+>. Например, <literal
+>source/kde/applications/kate</literal
+> в структуре <userinput
+>metadata</userinput
+> в структуре <userinput
+>invent</userinput
+> будет <literal
+>source/utilities/kate</literal
+>. Она влияет только на проекты KDE и хорошо подходит тем, кто только начинает работать с &kdesrc-build;. </para>
+<para
+>Наконец, структура <userinput
+>metadata</userinput
+> соответствует прежнему поведению по умолчанию. Она располагает проекты KDE по путям, заданным в метаданных этих модулей. Это хороший выбор, если нужна структура каталогов, следующая определённым процессам KDE, но учтите, что такие пути не всегда постоянны: из-за изменений в метаданных &kdesrc-build; может бросить старую копию репозитория и клонировать проект заново.</para>
+<para
+>Связанный параметр командной строки: --directory-layout <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-generate-vscode-project-config">
+<entry
+><link linkend="conf-generate-vscode-project-config"
+>generate-vscode-project-config</link
+></entry>
+
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>False</member>
+</simplelist>
+
+<para
+>Значение для модуля перекрывает глобальное</para>
+
+<para
+>Значение <userinput
+>true</userinput
+> заставляет &kdesrc-build; создавать в каталоге исходного кода модуля файлы проекта VS Code (каталог .vscode).</para>
+
+<para
+>Папка .vscode создаётся в каталоге исходного кода проекта, только если её ещё нет. Эта конфигурация позволяет использовать LSP, а также собирать, отлаживать и запускать проект прямо из VS Code.</para>
+
+<para
+>Кроме того, она рекомендует установить расширения, полезные при работе над большинством проектов KDE.</para>
+
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-generate-vscode-project-config"/></para>
+</entry>
+</row>
+
+<row id="conf-include-dependencies">
+<entry
+><link linkend="conf-include-dependencies"
+>include-dependencies</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>True</member>
+</simplelist>
+<para
+>Определяет, будет ли &kdesrc-build; включать в сборку известные зависимости модуля, не требуя их упоминания (даже косвенного).</para>
+
+<note
+><para
+>Параметр работает только для <link linkend="kde-projects-module-sets"
+>модулей на основе <literal
+>kde-project</literal
+></link
+> и требует, чтобы метаданные, которые ведут разработчики &kde;, были верны для выбранной <link linkend="conf-branch-group"
+>branch-group</link
+>.</para
+></note>
+
+<para
+>Это нужно для сборки приложений, которым требуются более новые версии &Qt; или &plasma;, чем поддерживаются в распространённых операционных системах.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-include-dependencies"/></para>
+</entry>
+</row>
+
+<row id="conf-install-after-build">
+<entry
+><link linkend="conf-install-after-build"
+>install-after-build</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Значение по умолчанию</member
+><member
+>True</member>
+</simplelist>
+<para
+>Определяет, устанавливать ли пакет после успешной сборки. Можно также использовать флаг командной строки <link linkend="cmdline-no-install"
+><option
+>--no-install</option
+></link
+>.</para>
+<para
+>Связанный параметр командной строки: --install-after-build, --no-install-after-build</para>
+</entry>
+</row>
+
+<row id="conf-install-dir">
+<entry
+><link linkend="conf-install-dir"
+>install-dir</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Значение по умолчанию</member
+><member
+><filename class="directory"
+>~/kde/usr</filename
+></member>
+</simplelist>
+<para
+>Задаёт, куда устанавливать модуль после сборки. Если указать каталог, требующий прав root, прочитайте также о параметре <link linkend="conf-make-install-prefix"
+>make-install-prefix</link
+>.</para>
+<para
+>Изменив этот параметр для отдельного модуля, его можно установить не туда, где установлены библиотеки платформы &kde;, — например, если &kdesrc-build; используется только для сборки приложений.</para>
+<para
+>В пути можно использовать <varname
+>${MODULE}</varname
+> или <varname
+>$MODULE</varname
+> — они заменяются именем модуля.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-install-dir"/></para>
+</entry>
+</row>
+
+<row id="conf-libname">
+<entry
+><link linkend="conf-libname"
+>libname</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Значение по умолчанию</member
+><member
+>Определяется автоматически</member>
+</simplelist>
+<para
+>Задаёт имя каталога установленных библиотек внутри ${install-dir} и ${qt-install-dir}. Во многих системах это «lib» или «lib64». По умолчанию правильное имя пытаются определить автоматически, но если догадка неверна, его можно изменить этим параметром.</para>
+<para
+>Связанный параметр командной строки: --libname <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-libpath">
+<entry
+><link linkend="conf-libpath"
+>libpath</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Задаёт переменную окружения <envar
+>LD_LIBRARY_PATH</envar
+> при сборке. Перекрыть это значение в параметрах модуля нельзя. По умолчанию значение пустое, но пути <filename class="directory"
+>${install-dir}/$<envar
+>LIBNAME</envar
+></filename
+> и <filename class="directory"
+>${qt-install-dir}/$<envar
+>LIBNAME</envar
+></filename
+> добавляются автоматически. В добавляемых путях можно использовать тильду (~).</para>
+<para
+>Связанный параметр командной строки: --libpath <replaceable
+>путь</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-log-dir">
+<entry
+><link linkend="conf-log-dir"
+>log-dir</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Задаёт каталог для файлов журнала, создаваемых сценарием.</para>
+<para
+>Связанный параметр командной строки: --log-dir <replaceable
+>путь</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-make-install-prefix">
+<entry
+><link linkend="conf-make-install-prefix"
+>make-install-prefix</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Список через пробел, который трактуется как команда с параметрами, предваряющая команду установки модулей <userinput
+><command
+>make</command
+> <option
+>install</option
+></userinput
+>. Удобно, например, для установки пакетов через &sudo;, но будьте осторожны с правами root.</para>
+<para
+>Связанный параметр командной строки: --make-install-prefix <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-make-options">
+<entry
+><link linkend="conf-make-options"
+>make-options</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Задаёт параметры командной строки для команды <command
+>make</command
+>. Полезно для программ вроде <ulink url="https://github.com/distcc/distcc"
+><application
+>distcc</application
+></ulink
+> или систем с несколькими процессорными ядрами.</para>
+<para
+>Не все поддерживаемые системы сборки используют <command
+>make</command
+>. Для систем сборки на <command
+>ninja</command
+> (например, <link linkend="conf-override-build-system"
+>системы сборки <application
+>Meson</application
+></link
+>) смотрите параметр <link linkend="conf-ninja-options"
+>ninja-options</link
+>.</para>
+<para
+>Связанный параметр командной строки: --make-options <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-manual-build">
+<entry
+><link linkend="conf-manual-build"
+>manual-build</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>False</member>
+</simplelist>
+<para
+>Значение <userinput
+>true</userinput
+> запрещает сборку этого модуля; при обновлении из &git; он по-прежнему обновляется. Параметр полностью равнозначен параметру командной строки <link linkend="cmdline-no-build"
+> <option
+>--no-build</option
+> </link
+>. </para>
+</entry>
+</row>
+
+<row id="conf-manual-update">
+<entry
+><link linkend="conf-manual-update"
+>manual-update</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>False</member>
+</simplelist>
+<para
+>Значение <userinput
+>true</userinput
+> запрещает обновление (а значит, и сборку, и установку) этого модуля. По сути, это равносильно тому, что модуль закомментирован.</para>
+</entry>
+</row>
+
+<row id="conf-ninja-options">
+<entry
+><link linkend="conf-ninja-options"
+>ninja-options</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Задаёт параметры командной строки для команды сборки <command
+>ninja</command
+>. Полезно, чтобы включить <quote
+>подробный</quote
+> вывод или вручную уменьшить число параллельных заданий сборки <command
+>ninja</command
+>.</para>
+
+<note
+><para
+>Этот параметр управляет ninja, только когда её вызывает &kdesrc-build;. Модуль &Qt; <quote
+>webengine</quote
+> использует <command
+>ninja</command
+> косвенно, а официально поддерживает сборку только через <command
+>make</command
+>. В этом случае через <link linkend="conf-make-options"
+>make-options</link
+> можно задать <literal
+>NINJAFLAGS</literal
+>, чтобы <command
+>make</command
+> передавал нужные флаги при вызове <command
+>ninja</command
+>.</para>
+
+<programlisting
+>options <replaceable
+>qtwebengine</replaceable>
+    # Ограничить make и ninja не более чем 6 заданиями компиляции даже
+    # при большем числе процессоров, чтобы не кончилась память
+    <option
+><link linkend="conf-make-options"
+>make-options</link
+></option
+> -j<replaceable
+>6</replaceable
+> NINJAFLAGS=-j<replaceable
+>6</replaceable>
+end options
+</programlisting>
+</note>
+<para
+>Связанный параметр командной строки: --ninja-options <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-override-build-system">
+<entry
+><link linkend="conf-override-build-system"
+>override-build-system</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Значение по умолчанию</member
+><member
+>Определяется автоматически</member>
+<member
+>Допустимые значения</member
+><member
+>KDE, Qt, qmake, generic, autotools, meson</member>
+<member
+>Доступен с версии</member
+><member
+>1.16</member>
+</simplelist>
+<para
+>Обычно &kdesrc-build; сам определяет подходящую систему сборки модуля после его загрузки, проверяя наличие определённых файлов в каталоге исходного кода модуля.</para>
+
+<para
+>В некоторых модулях есть несколько наборов таких файлов, что может запутать автоматическое определение. Тогда правильный тип сборки можно указать вручную.</para>
+
+<para
+>Сейчас можно задать следующие типы сборки:</para>
+
+<variablelist>
+    <varlistentry>
+        <term
+>KDE</term>
+        <listitem
+><para
+>Для сборки модулей &kde;. Фактически годится почти для любого модуля на &cmake;, но полагаться на это не стоит.</para
+></listitem>
+    </varlistentry>
+    <varlistentry>
+        <term
+>Qt</term>
+        <listitem
+><para
+>Для сборки самой библиотеки &Qt;.</para
+></listitem>
+    </varlistentry>
+    <varlistentry>
+        <term
+>qmake</term>
+        <listitem
+><para
+>Для сборки модулей &Qt; с файлами <literal
+>.pro</literal
+> в стиле <application
+>qmake</application
+>.</para
+></listitem>
+    </varlistentry>
+    <varlistentry>
+        <term
+>generic</term>
+        <listitem
+><para
+>Для сборки модулей с обычными Makefile, не требующих особой настройки.</para
+></listitem>
+    </varlistentry>
+    <varlistentry>
+        <term
+>autotools</term>
+        <listitem
+><para
+>Стандартное средство конфигурации большинства свободных программ с открытым исходным кодом, не попадающих в другие категории.</para
+></listitem>
+    </varlistentry>
+    <varlistentry>
+        <term
+>meson</term>
+        <listitem
+><para
+><ulink url="https://mesonbuild.com"
+>Относительно новое средство</ulink
+>, набирающее популярность как замена autotools; может понадобиться для некоторых модулей не из &kde;.</para
+></listitem>
+    </varlistentry>
+</variablelist>
+
+<para
+>Связанный параметр командной строки: --override-build-system <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-purge-old-logs">
+<entry
+><link linkend="conf-purge-old-logs"
+>purge-old-logs</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>True</member>
+</simplelist>
+<para
+>Определяет, удалять ли автоматически старые каталоги журналов.</para>
+<para
+>Связанный параметр командной строки: --purge-old-logs, --no-purge-old-logs</para>
+</entry>
+</row>
+
+<row id="conf-qmake-options">
+<entry
+><link linkend="conf-qmake-options"
+>qmake-options</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.16</member>
+</simplelist>
+<para
+>Указанные здесь параметры передаются команде <command
+>qmake</command
+> для модулей с системой сборки <symbol
+>qmake</symbol
+>. Например, параметром qmake <userinput
+>PREFIX=/path/to/qt</userinput
+> можно изменить место установки модуля. </para>
+<para
+>Связанный параметр командной строки: --qmake-options <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-qt-install-dir">
+<entry
+><link linkend="conf-qt-install-dir"
+>qt-install-dir</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Задаёт, куда устанавливать модули qt после сборки. Если параметр не указан, &kdesrc-build; считает, что &Qt; предоставляется операционной системой. </para>
+<para
+>Связанный параметр командной строки: --qt-install-dir <replaceable
+>путь</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-remove-after-install">
+<entry
+><link linkend="conf-remove-after-install"
+>remove-after-install</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Допустимые значения</member
+><member
+>none, builddir, all</member>
+<member
+>Значение по умолчанию</member
+><member
+>none</member>
+</simplelist>
+<para
+>При нехватке места на диске этот параметр позволяет после успешной установки модуля автоматически удалять каталог сборки (или, при однократной установке, и каталог исходного кода, и каталог сборки). </para>
+<para
+>Возможные значения: <itemizedlist>
+<listitem
+><para
+>none — ничего не удалять.</para
+></listitem>
+<listitem
+><para
+>builddir — удалять каталог сборки, но не исходный код.</para
+></listitem>
+<listitem
+><para
+>all — удалять и исходный код, и каталог сборки.</para
+></listitem>
+</itemizedlist>
+</para>
+
+<para
+>Учтите, что этот параметр может заметно увеличить и расход трафика (при значении <replaceable
+>all</replaceable
+>), и время компиляции программ &kde;, поскольку &kdesrc-build; не сможет выполнять инкрементальную сборку.</para>
+<para
+>Связанный параметр командной строки: --remove-after-install <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-repository">
+<entry
+><link linkend="conf-repository"
+>repository</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.10</member>
+</simplelist>
+<para
+>Задаёт репозиторий &git;, из которого загружается исходный код модуля. Этот параметр нужен &Qt; (а значит, и qt), а также различным модулям &kde;, переходящим на &git;.</para
+></entry>
+</row>
+
+<row id="conf-revision">
+<entry
+><link linkend="conf-revision"
+>revision</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.16</member>
+</simplelist>
+<para
+>Если значение отлично от 0 (нуля), &kdesrc-build; принудительно обновит исходный код модуля точно до указанной ревизии, даже если действуют параметры вроде <link linkend="conf-branch"
+>branch</link
+>. Если модуль уже в этой ревизии, дальше он не обновляется, пока параметр не изменят или не уберут из конфигурации.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-revision"/></para>
+</entry>
+</row>
+
+<row id="conf-run-tests">
+<entry
+><link linkend="conf-run-tests"
+>run-tests</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>False</member>
+</simplelist>
+<para
+>При значении <userinput
+>true</userinput
+> модуль собирается с поддержкой набора тестов, и тесты выполняются в ходе сборки. &kdesrc-build; покажет простой отчёт о результатах. Полезно разработчикам и тем, кто хочет убедиться, что система настроена правильно.</para>
+<para
+>Связанный параметр командной строки: --run-tests, --no-run-tests</para>
+</entry>
+</row>
+
+<row id="conf-set-env">
+<entry
+><link linkend="conf-set-env"
+>set-env</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+</simplelist>
+<para
+>Принимает набор значений через пробел: первое — имя переменной окружения, остальные — её значение. Например, чтобы задать переменной <envar
+>RONALD</envar
+> значение McDonald, поместите в нужный раздел команду:</para>
+<programlisting
+><command
+>set-env</command
+> <envar
+>RONALD</envar
+> <userinput
+>McDonald</userinput
+>
+</programlisting>
+<para
+>Особенность этого параметра в том, что его можно повторять, не перекрывая прежние значения set-env в том же разделе <link linkend="configure-data"
+>файла конфигурации</link
+>. Так для модуля (или глобально) можно задать несколько переменных окружения.</para>
+</entry>
+</row>
+
+<row id="conf-source-dir">
+<entry
+><link linkend="conf-source-dir"
+>source-dir</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Значение по умолчанию</member
+><member
+><filename class="directory"
+>~/kde/src</filename
+></member>
+</simplelist>
+<para
+>Задаёт каталог на компьютере для хранения исходного кода &kde; из &git;. Домашний каталог можно обозначать тильдой (~).</para>
+<para
+>Связанный параметр командной строки: --source-dir <replaceable
+>путь</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-stop-on-failure">
+<entry
+><link linkend="conf-stop-on-failure"
+>stop-on-failure</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>True</member>
+</simplelist>
+<para
+>Значение <userinput
+>false</userinput
+> позволяет сценарию продолжать работу после ошибки сборки или установки.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-stop-on-failure"/></para>
+</entry>
+</row>
+
+<row id="conf-tag">
+<entry
+><link linkend="conf-tag"
+>tag</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.16</member>
+</simplelist>
+<para
+>Позволяет загрузить определённый выпуск модуля.</para>
+<para
+><emphasis
+>Примечание:</emphasis
+> скорее всего, этот параметр вам <emphasis
+>не нужен</emphasis
+>. Выпуски &kde; доступны в виде архивов на <ulink url="https://download.kde.org/"
+>сайте загрузки &kde;</ulink
+>.</para>
+<para
+>Связанный параметр командной строки: --tag <replaceable
+>значение</replaceable
+></para>
+</entry>
+</row>
+
+<row id="conf-use-clean-install">
+<entry
+><link linkend="conf-use-clean-install"
+>use-clean-install</link
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Логический</member>
+<member
+>Значение по умолчанию</member
+><member
+>False</member>
+<member
+>Доступен с версии</member
+><member
+>1.12</member>
+</simplelist>
+<para
+>Значение <userinput
+>true</userinput
+> заставляет &kdesrc-build; выполнять <command
+>make uninstall</command
+> непосредственно перед <command
+>make install</command
+>.</para>
+
+<para
+>Это помогает избавиться от оставшихся старых файлов библиотек, метаданных &cmake; и т. п., способных вызывать проблемы в давних установках &kde;. Работает только с системами сборки, поддерживающими <command
+>make uninstall</command
+>.</para>
+<para
+>Связанный параметр командной строки: --use-clean-install, --no-use-clean-install</para>
+</entry>
+</row>
+
+</tbody>
+
+</tgroup>
+</table>
+
+<para
+>Эти параметры не требуют значения (кроме «filter-out-phases») и действуют, если указаны в разделе.</para>
+<table id="options-phase-selection-table">
+<title
+>Параметры выбора этапов</title>
+<tgroup cols="2">
+
+<thead>
+<row>
+<entry
+>Имя параметра</entry>
+<entry
+>Область действия</entry>
+<entry
+>Описание</entry>
+</row>
+</thead>
+<tbody>
+
+<row id="conf-no-src">
+<entry
+><link linkend="conf-no-src"
+>no-src</link
+></entry>
+<entry
+><simplelist type='vert'
+><member
+>global</member
+><member
+>module</member
+><member
+>module-set</member
+></simplelist
+></entry>
+<entry>
+<para
+>Убрать этап <emphasis
+>update</emphasis
+>. Остальные указанные этапы выполняются.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-no-src"/></para>
+</entry>
+</row>
+
+<row id="conf-no-install">
+<entry
+><link linkend="conf-no-install"
+>no-install</link
+></entry>
+<entry
+><simplelist type='vert'
+><member
+>global</member
+><member
+>module</member
+><member
+>module-set</member
+></simplelist
+></entry>
+<entry>
+<para
+>Убрать этап <emphasis
+>install</emphasis
+>. Остальные указанные этапы выполняются.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-no-install"/></para>
+</entry>
+</row>
+
+<row id="conf-no-tests">
+<entry
+><link linkend="conf-no-tests"
+>no-tests</link
+></entry>
+<entry
+><simplelist type='vert'
+><member
+>global</member
+><member
+>module</member
+><member
+>module-set</member
+></simplelist
+></entry>
+<entry>
+<para
+>Убрать этап <emphasis
+>test</emphasis
+>. Остальные указанные этапы выполняются.</para>
+<para
+>Связанный параметр командной строки: --no-tests</para>
+</entry>
+</row>
+
+<row id="conf-no-build">
+<entry
+><link linkend="conf-no-build"
+>no-build</link
+></entry>
+<entry
+><simplelist type='vert'
+><member
+>global</member
+><member
+>module</member
+><member
+>module-set</member
+></simplelist
+></entry>
+<entry>
+<para
+>Убрать этап <emphasis
+>build</emphasis
+>. Остальные указанные этапы выполняются.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-no-build"/></para>
+</entry>
+</row>
+
+<row id="conf-build-only">
+<entry
+><link linkend="conf-build-only"
+>build-only</link
+></entry>
+<entry
+><simplelist type='vert'
+><member
+>global</member
+><member
+>module</member
+><member
+>module-set</member
+></simplelist
+></entry>
+<entry>
+<para
+>Если есть этап <emphasis
+>build</emphasis
+>, убрать все остальные этапы; иначе убрать все этапы.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-build-only"/></para>
+</entry>
+</row>
+
+<row id="conf-install-only">
+<entry
+><link linkend="conf-install-only"
+>install-only</link
+></entry>
+<entry
+><simplelist type='vert'
+><member
+>global</member
+><member
+>module</member
+><member
+>module-set</member
+></simplelist
+></entry>
+<entry>
+<para
+>Если есть этап <emphasis
+>install</emphasis
+>, убрать все остальные этапы; иначе убрать все этапы.</para>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-install-only"/></para>
+</entry>
+</row>
+
+<row id="conf-uninstall">
+<entry
+><link linkend="conf-uninstall"
+>uninstall</link
+></entry>
+<entry
+><simplelist type='vert'
+><member
+>global</member
+><member
+>module</member
+><member
+>module-set</member
+></simplelist
+></entry>
+<entry>
+<para
+>Если есть этап <emphasis
+>uninstall</emphasis
+>, убрать все остальные этапы; иначе убрать все этапы.</para>
+<para
+>Связанный параметр командной строки: --uninstall</para>
+</entry>
+</row>
+
+<row id="conf-filter-out-phases">
+<entry
+><link linkend="conf-filter-out-phases"
+>filter-out-phases</link
+></entry>
+<entry
+><simplelist type='vert'
+><member
+>global</member
+><member
+>module</member
+><member
+>module-set</member
+></simplelist
+></entry>
+<entry>
+<para
+>Убрать этапы, перечисленные (через пробел) в этом параметре. Остальные указанные этапы выполняются.</para>
+</entry>
+</row>
+
+</tbody>
+</tgroup>
+</table>
+
+<table id="options-module-set-table">
+<title
+>Параметры выбора модулей</title>
+<tgroup cols="2">
+
+<thead>
+<row>
+<entry
+>Имя параметра</entry>
+<entry
+>Область действия</entry>
+<entry
+>Описание</entry>
+</row>
+</thead>
+<tbody>
+
+
+<row id="conf-ignore-modules">
+<entry
+><link linkend="conf-ignore-modules"
+>ignore-modules</link
+></entry>
+<entry
+><simplelist type='vert'
+><member
+>global</member
+><member
+>module-set</member
+></simplelist
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.16</member>
+</simplelist>
+<para
+>Если параметр задан в глобальном разделе, параметр командной строки &cmd-ignore-modules; не перекрывает его, а дополняет.</para>
+<para
+>Модули, перечисленные в этом параметре, которые &kdesrc-build; выбрал бы из-за параметра <link linkend="conf-use-modules"
+>use-modules</link
+>, полностью пропускаются. Используйте его, чтобы собрать целую группу проектов <link linkend="kde-projects-module-sets"
+>kde-projects</link
+> <emphasis
+>за исключением</emphasis
+> отдельных модулей.</para>
+
+<para
+>Значение не обязательно должно прямо называть модуль. Пропускается любой модуль, у которого полные последовательные части <link linkend="kde-projects-module-sets"
+>пути модуля в проектах &kde;</link
+> совпадают с одним из значений, — так можно пропустить сразу несколько модулей.</para>
+
+<para
+>Например, значение <replaceable
+>libs</replaceable
+> исключит и <symbol
+>kde/kdegraphics/libs</symbol
+>, и <symbol
+>playground/libs</symbol
+> (но не <symbol
+>kde/kdelibs</symbol
+>, поскольку сравнивается целая часть <quote
+>kdelibs</quote
+>).</para>
+
+<tip
+><para
+>Смотрите также <xref linkend="example-ignoring-a-module"/>.</para
+></tip>
+<para
+>Связанный параметр командной строки: <xref linkend="cmdline-ignore-modules"/></para>
+</entry>
+</row>
+
+<row id="conf-use-modules">
+<entry
+><link linkend="conf-use-modules"
+>use-modules</link
+></entry>
+<entry
+><simplelist type='vert'
+><member
+>module-set</member
+></simplelist
+></entry>
+<entry>
+<simplelist type='horiz' columns='2'>
+<member
+>Тип</member
+><member
+>Строка</member>
+<member
+>Доступен с версии</member
+><member
+>1.12.1</member>
+</simplelist>
+<para
+>Позволяет легко указать в одном месте <link linkend="kdesrc-buildrc"
+>файла конфигурации</link
+> много собираемых модулей.</para>
+
+<para
+>Каждый переданный идентификатор внутри превращается в модуль &kdesrc-build;, параметр <link linkend="conf-repository"
+><option
+>repository</option
+></link
+> которого складывается из репозитория набора модулей и имени идентификатора — так получается итоговый репозиторий загрузки. Все остальные параметры набора модулей без изменений копируются в созданные модули.</para>
+
+<para
+>Порядок модулей в этом параметре важен: в этом же порядке &kdesrc-build; обновляет, собирает и устанавливает созданные модули. Все модули набора обрабатываются до того, как &kdesrc-build; перейдёт к модулю, следующему за набором.</para>
+
+<para
+>Чтобы изменить параметры созданного модуля, просто опишите модуль ещё раз после набора модулей и задайте нужные параметры. Параметры модуля изменятся, но обновляться и собираться он будет в порядке, заданном набором (то есть порядок сборки так не изменить).</para>
+
+<important
+><para
+>Имя модуля при этом — то, что передано в <option
+>use-modules</option
+>, только без <literal
+>.git</literal
+>.</para
+></important>
+
+<para
+>Описание и пример — в <xref linkend="module-sets"/> и <link linkend="conf-git-repository-base"
+>git-repository-base</link
+>.</para>
+</entry>
+</row>
+
+</tbody>
+</tgroup>
+</table>
+
+</sect1>

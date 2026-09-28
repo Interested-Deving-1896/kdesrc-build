@@ -1,0 +1,109 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<sect1 id="kdesrc-build-logging">
+<title
+>Журналирование сборки в &kdesrc-build;</title>
+
+<sect2 id="logging-overview">
+<title
+>Обзор журналирования</title>
+
+<para
+>Журналирование — возможность &kdesrc-build;, при которой вывод каждой запускаемой &kdesrc-build; команды сохраняется в файл для последующего изучения. Вывод этих программ часто нужен при сбое сборки, ведь причин для сбоя очень много.</para>
+
+<sect3 id="log-directory-layout">
+<title
+>Структура каталога журналов</title>
+
+<para
+>Журналы всегда хранятся в каталоге журналов, который задаётся параметром <link linkend="conf-log-dir"
+>log-dir</link
+>; по умолчанию это <filename class="directory"
+><symbol
+>${source-dir}</symbol
+>/log</filename
+> (где <symbol
+>${source-dir}</symbol
+> — значение параметра <link linkend="conf-source-dir"
+>source-dir</link
+>; далее в этом разделе этот каталог обозначается <symbol
+>${log-dir}</symbol
+>).</para>
+
+<para
+>В <symbol
+>${log-dir}</symbol
+> — набор каталогов, по одному на каждый запуск &kdesrc-build;. Имя каталога состоит из даты и номера запуска. Например, при втором запуске &kdesrc-build; 26 мая 2004 года создаётся каталог <filename
+>2004-05-26-02</filename
+>, где 2004-05-26 — дата, а -02 — номер запуска.</para>
+
+<para
+>Для удобства &kdesrc-build; создаёт и ссылку на журналы последнего запуска — <filename class="directory"
+>latest</filename
+>. Так что журналы последнего запуска &kdesrc-build; всегда находятся в <filename class="directory"
+><symbol
+>${log-dir}</symbol
+>/latest</filename
+>. </para>
+
+<para
+>В каталоге каждого запуска &kdesrc-build; тоже есть набор каталогов — по одному на каждый модуль &kde;, который &kdesrc-build; пытается собрать. Кроме того, там лежит файл <filename
+>build-status</filename
+>, по которому видно, какие модули собрались, а какие нет.</para>
+
+<note
+><para
+>Если у модуля есть подмодуль (например, extragear/multimedia, playground/utils или KDE/kdelibs), в каталоге журналов будет соответствующая структура. Например, журналы KDE/kdelibs после последнего запуска &kdesrc-build; окажутся в <filename class="directory"
+><symbol
+>${log-dir}</symbol
+>/latest/KDE/kdelibs</filename
+>, а не в <filename class="directory"
+><symbol
+>${log-dir}</symbol
+>/latest/kdelibs</filename
+>. </para
+></note>
+
+<para
+>В каталоге журналов каждого модуля — набор файлов для каждой операции &kdesrc-build;. Если &kdesrc-build; обновлял модуль, там могут быть файлы вроде <filename
+>git-checkout-update.log</filename
+> (при получении модуля или обновлении уже полученного). Если выполнялась команда <command
+>configure</command
+>, там будет <filename
+>configure.log</filename
+>.</para>
+
+<para
+>Если произошла ошибка, объяснение должно найтись в одном из файлов. Чтобы было проще понять, в каком, &kdesrc-build; создаёт ссылку <filename
+>error.log</filename
+> на файл с ошибкой (например, на <filename
+>build-1.log</filename
+>).</para>
+
+<para
+>В итоге, чтобы узнать, почему модуль не собрался при последнем запуске &kdesrc-build;, первым делом смотрите файл <filename
+><symbol
+>${log-dir}</symbol
+>/latest/<replaceable
+>имя-модуля</replaceable
+>/error.log</filename
+>. </para>
+
+<tip
+><para
+>Если файл <filename
+>error.log</filename
+> пуст (особенно после установки), ошибки, возможно, и не было: некоторые средства системы сборки &kde; иногда ошибочно сообщают об ошибке.</para>
+
+<para
+>Кроме того, некоторые команды в определённых условиях (обычно при первом получении из &git;) обходят перенаправление вывода &kdesrc-build; и минуют файл журнала; тогда сообщения об ошибках оказываются не в журнале, а в &konsole; или терминале, где запускался &kdesrc-build;.</para>
+</tip>
+
+</sect3>
+</sect2>
+</sect1>

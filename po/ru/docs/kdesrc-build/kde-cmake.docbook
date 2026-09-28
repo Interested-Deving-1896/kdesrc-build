@@ -1,0 +1,46 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<chapter id="kde-cmake">
+<title
+>&cmake; — система сборки &kde;</title>
+
+<sect1 id="kde-cmake-intro">
+<title
+>Введение в &cmake;</title>
+
+<para
+>В марте 2006 года программа &cmake; обошла нескольких конкурентов и стала системой сборки &kde; 4, заменив систему на основе autotools, которую &kde; использовала с самого начала.</para>
+
+<para
+>Введение в &cmake; есть в <ulink url="https://community.kde.org/Guidelines_HOWTOs/CMake"
+>вики сообщества &kde;</ulink
+>. По сути, вместо <userinput
+><command
+>make</command
+> <option
+>-f</option
+> <filename
+>Makefile.cvs</filename
+></userinput
+>, затем <command
+>configure</command
+> и затем &make; мы просто запускаем &cmake;, а затем &make;. </para>
+
+<para
+>&kdesrc-build; поддерживает &cmake;. Некоторые возможности &kdesrc-build; на деле были возможностями системы сборки — например, <link linkend="conf-configure-flags"
+>configure-flags</link
+> и <link linkend="conf-do-not-compile"
+>do-not-compile</link
+>. Где есть равнозначные возможности, они поддерживаются: так, аналог configure-flags — <link linkend="conf-cmake-options"
+>cmake-options</link
+>, а <link linkend="conf-do-not-compile"
+>do-not-compile</link
+> поддерживается для &cmake; начиная с &kdesrc-build; версии 1.6.3. </para>
+
+</sect1>
+</chapter>
