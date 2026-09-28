@@ -1,0 +1,216 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<chapter id="features">
+<title
+>Возможности сценария</title>
+
+<sect1 id="features-overview">
+<title
+>Обзор возможностей</title>
+
+<para
+>Возможности &kdesrc-build;: </para>
+
+<itemizedlist>
+
+<listitem
+><para
+>Действия можно <quote
+>имитировать</quote
+>. С параметром <option
+>--pretend</option
+> или <option
+>-p</option
+> сценарий подробно описывает команды, которые собирается выполнить, не выполняя их. Но если &kdesrc-build; ещё ни разу не запускался, для работы <option
+>--pretend</option
+> сначала выполните <command
+>kdesrc-build <option
+><link linkend="cmdline-metadata-only"
+>--metadata-only</link
+></option
+></command
+>. <tip
+><para
+>Ещё более подробное описание действий &kdesrc-build; даёт параметр <option
+>--debug</option
+>. </para
+></tip>
+
+</para
+></listitem>
+
+<listitem
+><para
+>&kdesrc-build; быстро получает модули: если модуль уже получался раньше, &kdesrc-build; загружает только коммиты, которых ещё нет на компьютере. </para>
+
+<tip
+><para
+>Для первого получения модуля Git особой подготовки обычно не нужно: репозиторий всё равно загружается целиком, и серверу легко определить, что отправлять.</para
+></tip>
+
+<para
+>Это быстрее для вас и снижает нагрузку на анонимные серверы &git; kde.org.</para>
+</listitem>
+
+<listitem
+><para
+>Ещё одно ускорение — сборка модуля начинается сразу после загрузки его исходного кода. (Начиная с версии 1.6.) </para
+></listitem>
+
+<listitem
+><para
+>Отличная поддержка сборки библиотеки &Qt; (если собираемым программам &kde; нужна свежая &Qt;, которой нет в дистрибутиве). </para
+></listitem>
+
+<listitem
+><para
+>&kdesrc-build; не требует графического интерфейса (<acronym
+>GUI</acronym
+>), так что программы &kde; можно собирать без графической среды. </para
+></listitem>
+
+<listitem
+><para
+>Поддерживаются параметры по умолчанию для всех модулей (например, параметры компиляции или конфигурации), которые обычно можно изменить и для отдельных модулей.</para>
+
+<para
+>Кроме того, &kdesrc-build; <link linkend="kdesrc-build-std-flags"
+>добавляет стандартные флаги</link
+>, избавляя от необходимости вводить их самому и от связанных с этим ошибок. Обратите внимание: это не действует, если (собственный) набор средств сборки задан, например, через <link linkend="conf-cmake-toolchain"
+>cmake-toolchain</link
+> </para
+></listitem>
+
+<listitem
+><para
+>&kdesrc-build; может получить определённую <link linkend="using-branches"
+>ветвь или метку</link
+> модуля, а также определённую <link linkend="conf-revision"
+>ревизию</link
+>. </para
+></listitem>
+
+<listitem
+><para
+>&kdesrc-build; может автоматически переключить каталог исходного кода на другой репозиторий, ветвь или метку. Это происходит при изменении параметра, влияющего на &url; репозитория, но чтобы разрешить &kdesrc-build; переключение, нужен параметр <link linkend="cmdline-src-only"
+>--src-only</link
+>. </para
+></listitem>
+
+<listitem
+><para
+>&kdesrc-build; может <link linkend="partial-builds"
+>получить только часть модуля</link
+>, если из большого модуля нужна лишь одна программа. </para
+></listitem>
+
+<listitem
+><para
+>Для разработчиков: &kdesrc-build; <link linkend="ssh-agent-reminder"
+>напомнит</link
+>, если используется git+ssh://, а <application
+>ssh-agent</application
+> не запущен, — иначе &ssh; будет многократно запрашивать пароль. </para
+></listitem>
+
+<listitem
+><para
+>Может <link linkend="deleting-build-dir"
+>удалять каталог сборки</link
+> модуля после установки, экономя место ценой времени будущих компиляций. </para
+></listitem>
+
+<listitem
+><para
+>Расположение используемых &kdesrc-build; каталогов настраивается (даже для отдельных модулей). </para
+></listitem>
+
+<listitem
+><para
+>Может использовать &sudo; или другую заданную пользователем команду для <link linkend="root-installation"
+>установки модулей</link
+>, чтобы &kdesrc-build; не нужно было запускать от имени суперпользователя. </para
+></listitem>
+
+<listitem
+><para
+>По умолчанию &kdesrc-build; работает <link linkend="build-priority"
+>с пониженным приоритетом</link
+>, чтобы компьютером можно было пользоваться, пока &kdesrc-build; работает. </para
+></listitem>
+
+<listitem
+><para
+>Поддерживает <link linkend="using-branches"
+>метки и ветви</link
+> &kde;. </para
+></listitem>
+
+<listitem
+><para
+>Поддерживается <link linkend="resuming"
+>возобновление сборки</link
+> с заданного модуля. Можно даже временно <link linkend="ignoring-modules"
+>пропустить некоторые модули</link
+> при сборке. </para
+></listitem>
+
+<listitem
+><para
+>При использовании &cmake; &kdesrc-build; показывает <link linkend="build-progress"
+>ход сборки</link
+> и всегда засекает её время, так что потом видно, сколько она длилась. </para
+></listitem>
+
+<listitem
+><para
+>Встроенный разумный набор параметров по умолчанию подходит для сборки базовой однопользовательской установки &kde; из анонимных репозиториев исходного кода. </para
+></listitem>
+
+<listitem
+><para
+>Раскрытие тильды в параметрах конфигурации. Например, можно указать: <programlisting
+>install-dir ~/kde/usr</programlisting>
+</para
+></listitem>
+
+<listitem
+><para
+>Система сборки настраивается автоматически, причём каталог исходного кода отличается от каталога сборки, чтобы исходный код оставался нетронутым. </para
+></listitem>
+
+<listitem
+><para
+>Можно задать глобальные параметры для всех получаемых модулей, а также параметры отдельных модулей. </para
+></listitem>
+
+<listitem
+><para
+>Принудительная полная пересборка при запуске &kdesrc-build; с параметром <option
+>--refresh-build</option
+>. </para
+></listitem>
+
+<listitem
+><para
+>Можно задать различные переменные окружения для сборки, в том числе <envar
+>DO_NOT_COMPILE</envar
+> и <envar
+>CXXFLAGS</envar
+>. </para
+></listitem>
+
+<listitem
+><para
+>Журналирование команд. Журналы датируются и нумеруются, так что журнал каждого запуска сценария сохраняется. Кроме того, создаётся особая символическая ссылка latest, всегда указывающая на самую свежую запись в каталоге журналов. </para
+></listitem>
+
+</itemizedlist>
+
+</sect1
+>&kdesrc-build-logging; </chapter>

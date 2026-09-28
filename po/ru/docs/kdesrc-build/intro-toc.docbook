@@ -1,0 +1,45 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<sect1 id="intro-toc">
+<title
+>Обзор документации</title>
+
+<para
+>В этом руководстве описаны следующие стороны работы &kdesrc-build;: </para>
+
+<itemizedlist>
+<listitem
+><para
+><link linkend="getting-started"
+>обзор</link
+> шагов, нужных для начала работы;</para
+></listitem>
+<listitem
+><para
+>важные <link linkend="features"
+>возможности</link
+>;</para
+></listitem>
+<listitem
+><para
+>синтаксис и параметры <link linkend="configure-data"
+>файла конфигурации</link
+>;</para
+></listitem>
+<listitem
+><para
+><link linkend="cmdline"
+>параметры командной строки</link
+>.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Описаны также шаги, которые нужно выполнить другими средствами (то есть те, что &kdesrc-build; не выполняет автоматически). </para>
+
+</sect1>

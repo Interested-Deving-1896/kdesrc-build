@@ -1,0 +1,42 @@
+<!--
+SPDX-FileCopyrightText: 2005 - 2008, 2010 - 2022 Michael Pyne <mpyne@kde.org>
+SPDX-FileCopyrightText: 2005 - 2024 The kdesrc-build authors
+
+SPDX-License-Identifier: GFDL-1.2-no-invariants-or-later
+-->
+
+<sect1 id="developer-features">
+<title
+>Возможности для разработчиков &kde;</title>
+
+<sect2 id="ssh-agent-reminder">
+<title
+>Проверка агента &ssh;</title>
+<para
+>&kdesrc-build; следит, чтобы разработчики &kde;, обращающиеся к репозиторию исходного кода &kde; через &ssh;, не забыли запустить агент &ssh;. Без него &kdesrc-build; может бесконечно ждать ввода пароля &ssh;, поэтому по умолчанию &kdesrc-build; перед обновлением исходного кода проверяет, запущен ли агент. </para>
+
+<note
+><para
+>Это делается только для разработчиков &kde;, использующих &ssh;. </para
+></note>
+
+<para
+>Если &kdesrc-build; неверно определяет наличие агента, проверку агента &ssh; можно отключить, задав параметру <option
+>disable-agent-check</option
+> значение <userinput
+>true</userinput
+>.</para>
+
+<informalexample>
+<para
+>Отключение проверки агента &ssh;:</para>
+<screen
+>global
+  disable-agent-check true
+end global
+</screen>
+</informalexample>
+
+</sect2>
+
+</sect1>
